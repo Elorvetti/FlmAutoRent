@@ -1,0 +1,23 @@
+@using FlmAutoRent.Presentation.Models;
+@model CategoryViewModel;
+
+<section class="display-flex flex-direction-column justify-content-center">
+    <h2 class="text-center font-weight-600">@Model.Title</h2>
+</section>
+<section class="display-flex flex-direction-column justify-content-center margin-top-small margin-bottom-small padding-left-small padding-right-small text-center max-width-1200">
+    @Html.Raw(Model.Description)
+</section>
+<section class="display-flex flex-direction-row justify-content-center margin-top-medium margin-bottom-medium owl-carousel">
+    @foreach (var card in Model.Cards)
+    {
+        <section class="card margin-left-xsmall margin-right-xsmall">
+            <section class="background-image background-image-cover box-shadow" style="background-image: url('@card.pathImg');"></section>
+            <section class="margin-left-medium margin-right-medium padding-small box-shadow vehicle-data">
+                <p class="text-center font-weight-600">@card.Title</p>
+                <p class="text-center margin-bottom-small">@card.Description</p>
+                <a class="btn background-color-red color-white text-center" href="@card.Permalink">Visualizza</a>
+            </section>
+
+        </section>
+    }
+</section>

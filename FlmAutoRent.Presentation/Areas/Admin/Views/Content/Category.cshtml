@@ -1,0 +1,53 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model CategoryViewModel;
+
+<div class="padding-small">
+    <h1>Categorie</h1>
+
+    <section class="border-grey box-shadow">
+        <form id="table-groups" method="post" action="/System/Groups">
+            <div class="padding-xsmall display-flex border-bottom-grey background-color-white">
+                <section class="table-header display-flex flex-direction-column flex-direction-row-d justify-content-flex-start flex-grow-2 max-width-100">
+                    
+                    <section class="display-flex justify-content-space-around margin-top-xsmall-m justify-content-flex-end-d flex-grow-2">
+                        <a class="btn line-height-35 background-color-blue color-white margin-left-xsmall padding-left-small padding-right-small box-shadow" asp-area="Admin" asp-controller="Content" asp-action="CategoryAddOrEdit">Aggiungi</a>
+                    </section>
+
+                </section>
+            </div>
+            
+            <div class="display-flex padding-small flex-direction-column overflow-x-scroll">
+                @foreach (var category in Model.Categories.Where(x => x.IdFather == 0))
+                {
+                    <section class="display-flex flex-direction-row justify-content-flex-start background-color-white border-grey padding-xsmall margin-bottom-xsmall box-shadow-small">
+                        <p class="width-1-2">@category.Name</p>
+                        <section class="display-flex width-1-2 flex-direction-row justify-content-flex-end">
+                            <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryMoveTop" asp-route-id="@category.Id" ><i class="material-icons padding-top-xxsmall color-black">keyboard_arrow_up</i></a>
+                            <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryMoveBottom" asp-route-id="@category.Id" ><i class="material-icons padding-top-xxsmall color-black">keyboard_arrow_down</i></a>
+                            <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryAddOrEdit" asp-route-idFather="@category.Id"><i class="material-icons padding-top-xxsmall color-black">add</i></a>
+                            <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryAddOrEdit" asp-route-id="@category.Id" ><i class="material-icons padding-top-xxsmall color-black">edit</i></a>
+                        </section>
+                    </section>  
+
+                    @foreach (var categoryc in Model.Categories.Where(x => x.IdFather == category.Id))
+                    {
+
+                        <section class="display-flex flex-direction-row justify-content-flex-start background-color-white border-grey padding-xsmall margin-bottom-xsmall margin-left-small box-shadow-small">
+                            <p class="width-1-2">@categoryc.Name</p>
+                            <section class="display-flex width-1-2 flex-direction-row justify-content-flex-end">
+                                <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryMoveTop" asp-route-id="@categoryc.Id" ><i class="material-icons padding-top-xxsmall color-black">keyboard_arrow_up</i></a>
+                                <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryMoveBottom" asp-route-id="@categoryc.Id" ><i class="material-icons padding-top-xxsmall color-black">keyboard_arrow_down</i></a>
+                                <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryAddOrEdit" asp-route-idFather="@categoryc.Id"><i class="material-icons padding-top-xxsmall color-black">add</i></a>
+                                <a class="btn background-color-white color-white margin-left-xsmall padding-left-xxsmall padding-right-xxsmall border-grey box-shadow-small" asp-area="Admin" asp-controller="Content" asp-action="CategoryAddOrEdit" asp-route-id="@categoryc.Id" ><i class="material-icons padding-top-xxsmall color-black">edit</i></a>
+                            </section>
+                        </section>    
+                        
+                    }  
+
+                }
+                
+            </div>
+
+        </form>
+    </section>
+</div>

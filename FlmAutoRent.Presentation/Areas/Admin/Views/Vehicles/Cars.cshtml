@@ -1,0 +1,50 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model CarsTableViewModel;
+
+
+<div class="padding-small">
+    <h1>Veicoli</h1>
+
+    <section class="border-grey box-shadow">
+        <form id="table-groups" method="post" action="/Vehicles/Cars">
+            <div class="padding-small display-flex border-bottom-grey background-color-white">
+                <section class="table-header display-flex flex-direction-column flex-direction-row-d justify-content-flex-start flex-grow-2 max-width-100">
+                    <select id="how-many-fields" asp-for="HowManyField" asp-items="@(new SelectList(Model.HowManyFieldList, "Value", "DisplayText"))"></select>
+                    
+                    <section class="display-flex justify-content-space-around margin-top-xsmall-m justify-content-flex-end-d flex-grow-2">
+                        <input id="find" class="flex-grow-5-m" asp-for="@Model.Find" placeholder="Cerca..." autocomplete="off" />
+                        <a class="btn line-height-35 background-color-blue color-white margin-left-xsmall padding-left-small padding-right-small box-shadow" asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFirstStep">Aggiungi</a>
+                    </section>
+                </section>
+            </div>
+            <div class="display-flex padding-small overflow-x-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-center">Logo</th>
+                            <th>Categoria</th>
+                            <th>Modello</th>
+                            <th class="text-center">Richieste Totali</th>
+                            <th class="text-center">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var car in Model.CarsListViewModel)
+                        {
+                            <tr>
+                                <td class="text-center"><img width="auto" height="auto" src="@car.PathLogo" /></td>
+                                <td class="vertical-align-middle">@car.Category</td>
+                                <td class="vertical-align-middle">@car.Model</td>
+                                <td class="text-center vertical-align-middle">@car.TotalRequest</td>
+                                <td class="text-center vertical-align-middle">
+                                    <a class="btn background-color-blue color-white font-size-14 padding-left-small padding-right-small vertical-align-middle box-shadow" asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFirstStep" asp-route-id="@car.Id">Modifica</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+    </section>
+</div>

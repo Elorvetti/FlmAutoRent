@@ -1,0 +1,62 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model CarAddViewModel;
+
+<div class="padding-small">
+    <div class="display-flex flex-direction-row justify-content-flex-end">
+        <h1 class="width-1-1">Veicolo</h1>
+        <section class="display-flex flex-direction-row justify-content-flex-end">
+            <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">1<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFirstStep" asp-route-id="@Model.Id"><p>Generale</p></a></span>
+            @if(Model.disableSecondStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">2<a href="#"><p>Carica<br />Immagini</p></a></span>    
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">3<a href="#"><p>Visualizza<br />Immagini</p></a></span>    
+            } else {
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">2<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsSecondStep" asp-route-id="@Model.Id"><p>Carica<br />Immagini</p></a></span>
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">3<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsSecondStepMenage" asp-route-id="@Model.Id"><p>Visualizza<br />Immagini</p></a></span>
+            }
+
+            @if(Model.disableThirdStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">4<a href="#"><p>Seo</p></a></span>
+            }else{
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">4<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsThirdStep" asp-route-id="@Model.Id"><p>Seo</p></a></span>
+            }
+
+            @if(Model.disableFourStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">5<a href="#"><p>Contatti</p></a></span>
+            } else {
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall active">5<a href="#"><p>Contatti</p></a></span>
+            }
+            
+            
+        </section>
+    </div>
+
+    <section class="margin-top-small">
+        <div class="display-flex padding-small overflow-x-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Email</th>
+                        <th>Messaggio</th>
+                        <th class="text-center">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model.carFourStep)
+                    {
+                        <tr>
+                            <td class="vertical-align-middle">@contact.PeopleName</td>
+                            <td class="vertical-align-middle">@contact.PeopleLastname</td>
+                            <td class="vertical-align-middle">@contact.PeopleEmail</td>
+                            <td class="vertical-align-middle">@contact.PeopleMessage</td>
+                            <td class="text-center vertical-align-middle">
+                                <a class="btn background-color-blue color-white font-size-14 padding-left-small padding-right-small vertical-align-middle box-shadow" asp-area="Admin" asp-controller="Contact" asp-action="Read" asp-route-id="@Model.Id" asp-route-imageId="@contact.MessageId">Leggi</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,30 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model MenuViewModel;
+
+<div id="sidebar" class="background-color-black-light display-flex flex-direction-column box-shadow">
+    <section>
+      
+        <ul class="control-list display-flex flex-direction-column hidden-desktop">
+            @foreach (var menu in Model.Menu.Where(x => x.MenuFatherId == null))
+            {
+                @if(menu.MenuFatherId == null){
+                    <li class="display-flex flex-direction-column padding-top-xsmall padding-left-small accordion">
+                        <a class="color-white"><i class="material-icons color-white padding-right-xsmall font-size-36">chevron_right</i>@menu.Name</a>
+                        <ul class="control-list display-flex flex-direction-column">
+                            @foreach (var menuChild in Model.Menu.Where(x => x.MenuFatherId == menu.Id)){
+                                <li class="display-flex padding-top-xsmall padding-left-medium"><a class="color-white" asp-area="Admin" asp-controller="@menuChild.CodMenu" asp-action="@menuChild.Link">@menuChild.Name</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+
+        <ul class="control-list display-flex flex-direction-column hidden-tablet-mobile">
+            @foreach (var menu in Model.MenuAside)
+                {
+                    <li class="display-flex padding-top-xsmall padding-bottom-xsmall padding-left-small @menu.Active"><a class="color-white" asp-area="Admin" asp-controller="@menu.CodMenu" asp-action="@menu.Link">@menu.Name</a></li>
+                }
+        </ul>
+    </section>
+</div>

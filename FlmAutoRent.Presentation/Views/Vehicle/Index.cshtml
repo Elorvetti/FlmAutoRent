@@ -1,0 +1,78 @@
+@using FlmAutoRent.Presentation.Models;
+@model VehicleViewModel;
+
+
+<section class="display-flex flex-direction-column justify-content-center">
+    <h2 class="text-center"><img src="@Model.BrandImage"></h2>
+    <h2 class="text-center font-weight-600 margin-remove">@Model.Brand<br /></h2>
+    <h2 class="text-center font-weight-500 margin-remove">@Model.ModelName</h2>
+</section>
+
+<section class="display-flex flex-direction-column flex-direction-row-d justify-content-center padding-left-small padding-right-small margin-top-small margin-bottom-small">
+    <div class="fotorama easyzoom" data-nav="thumbs">
+        @foreach (var image in Model.vehiclesImages)
+        {
+           <a href="@image.Path" class="zoomImg"><img src="@image.Path" alt="@image.Alt" /></a>
+        }
+    </div>
+    
+    <section class="display-flex flex-direction-column justify-content-center width-1-2-d">
+        <p class="text-center padding-left-small padding-right-small vehicle-description">@Model.Description</p>
+            <form method="POST" asp-controller="Contact" asp-action="Index" class="margin-top-medium contact" >
+                <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+                <div class="display-flex flex-direction-column justify-content-flex-start margin-bottom-small box-shadow border-radius-medium">
+                    <h2 class="text-center font-weight-600">Modulo di contatto</h2>
+                    <section class="padding-xsmall display-flex flex-direction-column justify-content-space-around">
+                    
+                        <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                            <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                                @Html.LabelFor(m => m.ContactModal.Name)
+                                @Html.TextBoxFor(m => m.ContactModal.Name, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                                <span asp-validation-for="@Model.ContactModal.Name" class="padding-left-xsmall color-red font-weight-600"></span>
+                            </section>
+                        
+                            <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                                @Html.LabelFor(m => m.ContactModal.Lastname)
+                                @Html.TextBoxFor(m => m.ContactModal.Lastname, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                                <span asp-validation-for="@Model.ContactModal.Lastname" class="padding-left-xsmall color-red font-weight-600"></span>
+                            </section>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall margin-bottom-xsmall">
+                            @Html.LabelFor(m => m.ContactModal.Email)
+                            @Html.TextBoxFor(m => m.ContactModal.Email, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.ContactModal.Email" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                            <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                                @Html.LabelFor(m => m.ContactModal.StartRent)
+                                <input asp-for="ContactModal.EndRent" type="date" asp-format="{0:dd-MM-yyyy}" class="margin-top-xsmall" autocomplete="off" />
+                                <span asp-validation-for="@Model.ContactModal.StartRent" class="padding-left-xsmall color-red font-weight-600"></span>
+                            </section>
+                        
+                            <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                                @Html.LabelFor(m => m.ContactModal.EndRent)
+                                <input asp-for="ContactModal.EndRent" type="date" asp-format="{0:dd-MM-yyyy}" class="margin-top-xsmall" autocomplete="off" />
+                                <span asp-validation-for="@Model.ContactModal.EndRent" class="padding-left-xsmall color-red font-weight-600"></span>
+                            </section>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall margin-bottom-xsmall">
+                            @Html.LabelFor(m => m.ContactModal.Message)
+                            @Html.TextAreaFor(m => m.ContactModal.Message, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.ContactModal.Message" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <div class="display-flex flex-direction-column align-items-center justify-content-space-around margin-top-small">
+                            <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Invia Richiesta">
+                        </div>
+                
+                    </section>
+                </div>
+
+             
+            </form>
+    </section>
+</section>
+

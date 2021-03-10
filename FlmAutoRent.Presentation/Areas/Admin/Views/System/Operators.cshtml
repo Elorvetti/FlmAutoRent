@@ -1,0 +1,57 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model OperatorsTableViewModel;
+
+
+<div class="padding-small">
+    <h1>Operatori</h1>
+
+    <section class="border-grey box-shadow">
+        <form id="table-emails" method="post" action="/System/Operators">
+            <div class="padding-small display-flex border-bottom-grey background-color-white">
+                <section class="table-header display-flex flex-direction-column flex-direction-row-d justify-content-flex-start flex-grow-2 max-width-100">
+                    <select id="how-many-fields" asp-for="HowManyField" asp-items="@(new SelectList(Model.HowManyFieldList, "Value", "DisplayText"))"></select>
+                    
+                    <section class="display-flex justify-content-space-around margin-top-xsmall-m justify-content-flex-end-d flex-grow-2">
+                        <input id="find" class="flex-grow-5-m" asp-for="@Model.Find" placeholder="Cerca..." autocomplete="off" />
+                        <a class="btn line-height-35 background-color-blue color-white margin-left-small padding-left-small padding-right-small box-shadow" asp-area="Admin" asp-controller="System" asp-action="OperatorsAddOrEdit">Aggiungi</a>
+                    </section>
+                </section>
+            </div>
+            <div class="isplay-flex padding-small overflow-x-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>UserID</th>
+                            <th>Nome</th>
+                            <th>Cognome</th>
+                            <th>Indirizzo Email</th>
+                            <th>Telefono</th>
+                            <th>Gruppo Appartenenza</th>
+                            <th>Stato</th>
+                            <th class="text-center">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Operator in Model.OperatatorListViewModel)
+                        {
+                            <tr>
+                                <td>@Operator.UserId</td>
+                                <td>@Operator.Name</td>
+                                <td>@Operator.LastName</td>
+                                <td>@Operator.EmailAddress</td>
+                                <td>@Operator.PhoneNr</td>
+                                <td>@Operator.Group</td>
+                                <td>@Operator.Enabled</td>
+                                <td class="text-center">
+                                    <a class="btn background-color-blue color-white font-size-14 padding-left-small padding-right-small vertical-align-middle box-shadow" asp-area="Admin" asp-controller="System" asp-action="OperatorsAddOrEdit" asp-route-id="@Operator.Id">Modifica</a>
+                                    <input type="button" class="btn background-color-red color-white font-size-14 padding-left-small padding-right-small vertical-align-middle delete operator-delete box-shadow" id="@Operator.Id" value="Elimina"/>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+    </section>
+</div>

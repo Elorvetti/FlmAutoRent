@@ -1,0 +1,80 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model CarAddViewModel;
+
+<div class="padding-small">
+    <div class="display-flex flex-direction-row justify-content-flex-end">
+        <h1 class="width-1-1">Veicolo</h1>
+        <section class="display-flex flex-direction-row justify-content-flex-end">
+            <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">1<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFirstStep" asp-route-id="@Model.Id"><p>Generale</p></a></span>
+            @if(Model.disableSecondStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">2<a href="#"><p>Carica<br />Immagini</p></a></span>    
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">3<a href="#"><p>Visualizza<br />Immagini</p></a></span>    
+            } else {
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">2<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsSecondStep" asp-route-id="@Model.Id"><p>Carica<br />Immagini</p></a></span>
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">3<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsSecondStepMenage" asp-route-id="@Model.Id"><p>Visualizza<br />Immagini</p></a></span>
+            }
+
+            @if(Model.disableThirdStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">4<a href="#"><p>Seo</p></a></span>
+            }else{
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall active">4<a href="#"><p>Seo</p></a></span>
+            }
+
+            @if(Model.disableFourStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">5<a href="#"><p>Contatti</p></a></span>
+            } else {
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">5<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFourStep" asp-route-id="@Model.Id"><p>Contatti</p></a></span>
+            }
+            
+            
+        </section>
+    </div>
+
+    <section class="margin-top-small">
+        <form method="POST" asp-area="Admin" asp-controller="Vehicles" asp-action="CarsThirdStep">
+            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+            
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">SEO</h3>
+                </section>
+                
+                <section class="padding-xsmall display-flex flex-direction-column justify-content-space-around">
+                    
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.thirdStep.MetaTitle)
+                            @Html.TextBoxFor(m => m.thirdStep.MetaTitle, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.thirdStep.MetaTitle" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.thirdStep.MetaDescription)
+                            @Html.TextBoxFor(m => m.thirdStep.MetaDescription, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.thirdStep.MetaDescription" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    </section>
+                    
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.thirdStep.PermaLink)
+                            @Html.TextBoxFor(m => m.thirdStep.PermaLink, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.thirdStep.PermaLink" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.thirdStep.SeoIndex)
+                            <select asp-for="thirdStep.SeoIndexId" asp-items="Model.thirdStep.SeoIndex" class="select-provider margin-top-xsmall"></select>
+                        </section>
+                    </section>
+    
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+            
+        </form>
+    </section>
+</div>

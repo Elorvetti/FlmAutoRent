@@ -1,0 +1,12 @@
+@using FlmAutoRent.Presentation.Models;
+@model PostViewModel;
+
+<section class="display-flex flex-direction-column justify-content-center">
+    <h2 class="text-center font-weight-600">@Model.Title</h2>
+</section>
+<section class="display-flex flex-direction-column justify-content-center margin-top-small margin-bottom-small padding-left-small padding-right-small">
+    <p class="text-center">@Model.Description</p>
+</section>
+<section class="display-flex flex-direction-column justify-content-center margin-top-medium padding-left-small padding-right-small">
+   @Html.Raw(Model.DisplayText)
+</section>

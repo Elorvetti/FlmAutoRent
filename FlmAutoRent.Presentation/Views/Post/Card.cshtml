@@ -1,0 +1,27 @@
+@using FlmAutoRent.Presentation.Models;
+@model PostViewModel;
+
+<section class="display-flex flex-direction-column justify-content-center">
+    <h2 class="text-center font-weight-600">@Model.Title</h2>
+</section>
+<section class="display-flex flex-direction-column justify-content-center margin-top-small margin-bottom-small padding-left-small padding-right-small">
+    <p class="text-center">@Model.Description</p>
+</section>
+<section class="display-flex flex-direction-column justify-content-center margin-top-medium padding-left-small padding-right-small">
+   @Html.Raw(Model.DisplayText)
+</section>
+<section class="display-flex flex-direction-row justify-content-center margin-bottom-small padding-left-small padding-right-small flex-wrap-wrap">
+    @foreach (var vehicle in Model.Cards)
+    {
+        <section class="display-flex flex-direction-row justify-content-center margin-top-medium margin-bottom-medium">
+            <section class="card margin-left-xsmall margin-right-xsmall">
+                <section class="background-image background-image-cover box-shadow" style="background-image: url('@vehicle.srcImg');"></section>
+                <section class="margin-left-medium margin-right-medium padding-small box-shadow vehicle-data">
+                    <p class="text-center font-weight-600">@vehicle.vehiclebrand</p>
+                    <p class="text-center">@vehicle.vehicleModel</p>
+                    <a class="btn background-color-red color-white text-center" href="@vehicle.permaLink">Visualizza</a>
+                </section>
+            </section>
+        </section>
+    }
+</section>

@@ -1,0 +1,30 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model MenuViewModel;
+
+<header>
+    <div class="display-flex background-color-black-light flex-direction-row justify-content-flex-end">
+        <span class="bakcground-color-white padding-xsmall display-flex">
+            <a class="color-white padding-left-xsmall font-size-18" asp-area="Admin" asp-controller="Operator" asp-action="Index"><i class="material-icons color-white margin-right-xsmall">person</i>PROFILO</a>
+        </span>
+        <span class="bakcground-color-white padding-xsmall display-flex">
+            <a class="color-white padding-left-xsmall font-size-18" asp-area="Admin" asp-controller="Account" asp-action="Logout"><i class="material-icons color-white">exit_to_app</i></a>
+        </span>
+    </div>
+
+    <div class="display-flex background-color-black flex-direction-row justify-content-space-around">
+        <div class="display-flex flex-direction-column width-1-1 justify-content-center">
+            <h1 class="display-flex color-white flex-direction-row padding-left-xsmall margin-remove"><img src="/adminroot/img/logo.png" alt="logo" width="auto" height="50"></h1>
+        </div>
+        <div class="display-flex flex-direction-column">
+            <section class="display-flex flex-direction-row align-items-center justify-content-center padding-right-small margin-top-xsmall margin-bottom-xsmall hidden-desktop">
+                <span class="menu-tablet-mobile"><i class="material-icons color-white font-size-36">menu</i></span>
+            </section>
+            <ul class="display-flex flex-direction-row align-items-end hidden-tablet-mobile">
+                @foreach (var menu in Model.MenuHeader)
+                {
+                    <li class="header-menu display-flex padding-small position-relative @menu.Active"><a class="color-white" asp-area="Admin" asp-controller="@menu.CodMenu" asp-action="@menu.Link">@menu.Name</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</header>

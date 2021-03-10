@@ -1,0 +1,143 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model EmailAddViewModel;
+
+<div class="padding-small">
+    @if(Model.Id != 0){
+        <h1>@Model.Name</h1>
+    } else {
+        <h1>Aggiungi Account Email</h1>
+    }
+
+    <section>
+        <form method="POST" asp-controller="System" asp-action="EmailsAddOrEdit" >
+            <input type="hidden" name="Id" value="@Model.Id" />
+           
+            @if(Model.Id == 0){
+                <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                    <section class="padding-xsmall border-bottom-grey background-color-white">
+                        <h3 class="padding-left-xsmall">Provider Predefiniti</h3>
+                    </section>
+                    <section class="padding-xsmall display-flex flex-direction-column">
+                        <section class="padding-left-xsmall display-flex flex-direction-column">
+                            @Html.LabelFor(m => m.DefaultEmailConfig)
+                            <select asp-for="Id" asp-items="Model.DefaultEmailConfig" class="select-provider margin-top-xsmall"></select>
+                        </section>
+                    </section>
+                </div>
+            }
+            
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Account</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                    
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.Email" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                </section>  
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Indirizzo POP</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.EmailPop)
+                        @Html.TextBoxFor(m => m.EmailPop, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.EmailPop" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+   
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.EmailPortPop)
+                        @Html.TextBoxFor(m => m.EmailPortPop, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.EmailPortPop" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                </section>
+            </div>
+            
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Indirizzo SMTP</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.EmailSmtp)
+                        @Html.TextBoxFor(m => m.EmailSmtp, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.EmailSmtp" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.EmailPortSmtp)
+                        @Html.TextBoxFor(m => m.EmailPortSmtp, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.EmailPortSmtp" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                </section>
+            </div>
+            
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Credenziali</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.Username)
+                        @Html.TextBoxFor(m => m.Username, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        <span asp-validation-for="@Model.Username" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+   
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-2">
+                        @Html.LabelFor(m => m.Password)
+                        <input asp-for="@Model.Password" class="margin-top-xsmall" autocomplete="off" placehodler = "..." value="@Model.Password" />
+                        
+                        <span asp-validation-for="@Model.Password" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Firma</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-1">
+                        @Html.LabelFor(m => m.Signature)
+                        <textarea asp-for="@Model.Signature" class="margin-top-xsmall addSummerNote" placeholder="..." autocomplete="off"></textarea>
+                    </section>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Crittografia</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row justify-content-space-around align-items-center">
+                    @foreach (var emailCrypt in Model.EmailSSL)
+                    {
+                        <section class="display-flex flex-direction-row align-items-center border-grey background-color-white emailSSL" >
+                            <section class="display-flex flex-direction-row align-items-center padding-small">
+                                <input type="radio" asp-for="@Model.EmailSSLValue" id="@emailCrypt.Id" class="checkbox-menu radio-email-ssl" value="@emailCrypt.Id" />
+                                <label for="@emailCrypt.Id" class="padding-left-xsmall color-blue">@emailCrypt.CryptType</label>
+                            </section>
+                        </section>
+                    }
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+
+            
+        </form>
+    </section>
+</div>

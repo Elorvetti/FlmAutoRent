@@ -1,0 +1,34 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model AccountLoginViewModel;
+
+
+<section id="password" class="box-shadow border-radius-small padding-bottom-small">
+    <form method="POST" asp-controller="Account" asp-action="Login" >
+         <div class="display-flex flex-direction-column">
+            
+            <section class="display-flex flex-direction-column align-items-center justify-content-space-around background-color-black">
+                <img src="/adminroot/img/logo.png" alt="logo" width="auto" height="50" class="margin-top-xsmall margin-bottom-xsmall">
+            </section>
+            
+            <section class="padding-left-xsmall padding-right-xsmall padding-top-xsmall display-flex flex-direction-column">
+                <section class="padding-xsmall display-flex flex-direction-column width-1-1">
+                    @Html.LabelFor(m => m.UserID)
+                    @Html.TextBoxFor(m => m.UserID, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                    <span asp-validation-for="@Model.UserID" class="color-red font-weight-600"></span>
+                </section>
+
+                <section class="padding-left-xsmall padding-right-xsmall padding-bottom-xsmall display-flex flex-direction-column width-1-1">
+                    @Html.LabelFor(m => m.Password)
+                    <input asp-for="@Model.Password" class="margin-top-xsmall" autocomplete="off" placehodler = "..." value="@Model.Password" />
+                    <span asp-validation-for="@Model.Password" class="color-red font-weight-600"></span>
+                </section>
+            </section>
+
+            <section class="display-flex flex-direction-column align-items-center justify-content-space-around border-top-grey padding-top-xsmall padding-small-bottom">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Accedi">
+            </section>
+
+         </div>
+        
+    </form>
+</section>

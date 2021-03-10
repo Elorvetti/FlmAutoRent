@@ -1,0 +1,82 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model GroupAddViewModel;
+
+<div class="padding-small">
+    @if(Model.Id != 0){
+        <h1>@Model.Name</h1>
+    } else {
+        <h1>Aggiungi Gruppo</h1>
+    }
+
+    <section>
+        <form method="POST" asp-controller="System" asp-action="GroupsAddOrEdit" >
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Gruppi Sistema</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <section class="padding-left-xsmall display-flex flex-direction-column">
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                        <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Menu Assocciati Al Gruppo</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    @for( var i = 0; i < Model.SystemMenuList.Count(); i++){
+                            @if(Model.SystemMenuList[i].MenuFatherId == null){
+                                <section class="menu-father padding-left-xsmall display-flex flex-direction-column border-grey padding-small background-color-white margin-right-xsmall">
+                                    <section class="display-flex flex-direction-row align-items-center margin-bottom-xsmall" >
+                                        <input type="checkbox" asp-for="@Model.SystemMenuList[i].Active" id="@Model.SystemMenuList[i].Id" class="checkbox-menu" menu-father="@Model.SystemMenuList[i].MenuFatherId" />
+                                        <label for="@Model.SystemMenuList[i].Id" class="padding-left-xsmall">@Model.SystemMenuList[i].Name</label>
+                                        <input type="hidden" asp-for="@Model.SystemMenuList[i].Id" />
+                                        <input type="hidden" asp-for="@Model.SystemMenuList[i].Name" />  
+                                    </section>
+                                    @for(var y = 0; y < Model.SystemMenuList.Count(); y++){
+                                        @if( Model.SystemMenuList[y].MenuFatherId == Model.SystemMenuList[i].Id){
+                                            <section class="display-flex flex-direction-row align-items-center margin-bottom-xsmall padding-left-xsmall" >
+                                                <input type="checkbox" asp-for="@Model.SystemMenuList[y].Active" id="@Model.SystemMenuList[y].Id" class="checkbox-menu-child" menu-father="@Model.SystemMenuList[y].MenuFatherId" />
+                                                <label for="@Model.SystemMenuList[y].Id" class="padding-left-xsmall">@Model.SystemMenuList[y].Name</label>
+                                                <input type="hidden" asp-for="@Model.SystemMenuList[y].Id" />
+                                                <input type="hidden" asp-for="@Model.SystemMenuList[y].Name" />  
+                                            </section>
+                                        }
+                                    }
+                                </section>
+                            }
+                    }
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Operatori</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    @for(var i = 0; i < Model.OperatorsList.Count(); i++){
+                        <section class="display-flex flex-direction-row align-items-center border-grey background-color-white margin-right-xsmall" >
+                            <section class="display-flex flex-direction-row align-items-center padding-small">
+                                <input type="checkbox" asp-for="@Model.OperatorsList[i].Active" id="@Model.OperatorsList[i].Id" class="checkbox-menu" />
+                                <label for="@Model.OperatorsList[i].Id" class="padding-left-xsmall color-blue"> <small>@Model.OperatorsList[i].Email</small><br />@string.Concat(Model.OperatorsList[i].Name, ' ', Model.OperatorsList[i].Lastname ) </label>
+                                <input type="hidden" asp-for="@Model.OperatorsList[i].Id" />
+                            </section>
+                        </section>
+                    }
+                </section>
+            </div>
+
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+
+            
+        </form>
+    </section>
+</div>

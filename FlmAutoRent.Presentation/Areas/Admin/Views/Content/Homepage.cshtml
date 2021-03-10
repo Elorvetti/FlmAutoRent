@@ -1,0 +1,157 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model HomepageViewModel;
+
+<div class="padding-small">
+    <div class="display-flex flex-direction-row justify-content-flex-end">
+        <h1 class="width-1-1">Home Page</h1>
+
+        <section class="display-flex flex-direction-row justify-content-flex-end">
+            <span device="mobile" class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall material-icons active">smartphone</span>
+            <span device="tablet" class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall material-icons">tablet_mac</span>
+            <span device="desktop" class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall material-icons">tv</span>
+        </section>
+
+    </div>
+
+    <section class="display-flex flex-direction-column justify-content-center align-items-center">
+        <form method="POST" asp-area="Admin" asp-controller="Content" asp-action="Homepage">
+            <div id="preview" class="display-flex flex-direction-column margin-top-medium box-shadow width-1-1" device="mobile">
+                <section id="header" class="display-flex flex-direction-column background-image background-image-cover min-height" style="background-image: url(@Model.ContentImageHeader)">
+                    <section class="display-flex flex-direction-row justify-content-space-around width-1-1 menu-container">
+                        <img width="200" height="auto" src="/upload/logo.png" alt="logo">
+                        <section class="display-flex flex-direction-row width-1-1 justify-content-flex-end">
+                            <span class="color-white text-right margin-xsmall btn-menu font-size-32 material-icons">menu</span>
+                        </section>
+                    </section>
+                    <ul class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall width-1-1 menu-list">
+                        <li class="dispaly-flex color-white font-size-20 font-weight-500 menu-items"><img width="200" height="auto" src="/upload/logo.png" alt="logo"></li>   
+                        @foreach (var category in Model.ContentCategories)
+                        {
+                            <li class="dispaly-flex flex-direction-column justify-content-center color-white font-size-20 font-weight-500 menu-items">@category.Name</li>   
+                        }
+                    </ul>
+                    <section class="display-flex flex-direction-column justify-content-center margin-left-small margin-right-small margin-top-small text-center textarea">
+                       <textarea asp-for="@Model.WelcomeMessage" class="display-flex flex-direction-column justify-content-center border-dashed text-center font-weight-500 color-white addSummerNote" placeholder="..." autocomplete="off"></textarea>
+                    </section>
+                    <span class="btn btn-circle btn-header-image background-color-blue-light color-white box-shadow text-center material-icons">edit</span>
+                    <span class="divider"></span>
+                </section>
+                <section class="display-flex flex-direction-column justify-content-center vehicle">
+                    <h2 class="text-center font-weight-00">LE NOSTRE AUTO</h2>
+                </section>
+                <section class="display-flex flex-direction-row justify-content-center vehicle margin-top-small owl-carousel">
+                    @foreach (var vehicle in Model.Vehicles)
+                    {
+                        <section class="card margin-left-xsmall margin-right-xsmall">
+                            <section class="background-image background-image-cover box-shadow" style="background-image: url('@vehicle.srcImg');"></section>
+                            <section class="margin-left-medium margin-right-medium padding-small box-shadow vehicle-data">
+                                <p class="text-center font-weight-600">@vehicle.vehiclebrand</p>
+                                <p class="text-center">@vehicle.vehicleModel</p>
+                                <span class="btn background-color-red color-white text-center">Visualizza</span>
+                            </section>
+
+                        </section>
+                    }
+                </section>
+                <section class="display-flex flex-direction-row justify-content-center margin-top-medium">
+                    <h2 class="text-center font-weight-00">NOLEGGIO AUTO SARONNO</h2>
+                </section>
+                <section class="display-flex justify-content-center margin-top-xsmall noleggio">
+                    <section class="display-flex flex-direction-row justify-content-center padding-left-small padding-bottom-medium padding-right-medium width-1-2">
+                        <section class="display-flex flex-direction-column justify-content-center text-center width-1-1 presentation">
+                            <textarea asp-for="@Model.Presentation" class="display-flex flex-direction-column justify-content-center border-dashed text-center font-weight-500 color-white addSummerNote" placeholder="..." autocomplete="off"></textarea>
+                        </section>
+                    </section>
+                    <section id="presentation" class="background-image background-image-cover info" style="background-image: url(@Model.ContentImagePresentation);"><span class="btn btn-circle btn-presentation-image background-color-blue-light color-white box-shadow text-center material-icons">edit</span></section>
+                </section>
+
+                <section class="display-flex justify-content-space-around margin-top-large padding-top-small padding-bottom-small background-color-black color-white footer">
+                    <section class="display-flex flex-direction-column padding-left-small">
+                        <p class="color-white font-size-18">Privacy & Cookie Policy</p>
+                        <p class="color-white font-size-18 padding-left-small">Privacy Policy</p>
+                        <p class="color-white font-size-18 padding-left-small">Cookie Policy</p>
+                    </section>
+                    <section class="display-flex flex-direction-column">
+                        <section class="display-flex flex-direction-column padding-left-small">
+                            <p class="color-white font-size-18">Contati</p>
+                            <p class="color-white font-size-18 padding-left-small">CEL: +39 3462781009 - Resp. Acquisti & Vendite</p>
+                            <p class="color-white font-size-18 padding-left-small">CEL: +39 3475241939 - Resp. Noleggio</p>
+                            <p class="color-white font-size-18 padding-left-small">Email: info@autorent.it</p>
+                        </section>
+                        <section class="display-flex flex-direction-column padding-left-small margin-top-small">
+                            <p class="color-white font-size-18">Social</p>
+                            <section class="display-flex flex-direction-row padding-left-small margin-top-xsmall">
+                                <span class="color-white"><svg style="width:36px;height:36px" viewBox="0 0 24 24"><path fill="currentColor" d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" /></svg></span>
+                                <span class="color-white margin-left-xsmall margin-right-xsmall"><svg style="width:36px;height:36px" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" /></svg></span>
+                                <span class="color-white"><svg style="width:36px;height:36px" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z" /></svg></span>
+                            </section>
+                        </section>
+                    </section>
+                    <section class="display-flex flex-direction-column map">
+                        <p class="color-white font-size-18">Dove siamo</p>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11157.290188910272!2d8.9801143!3d45.644344!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xef48ccaf2280d3d2!2sFLM%20Autorent!5e0!3m2!1sit!2sit!4v1611694748046!5m2!1sit!2sit" width="400" height="250" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    </section>
+                </section>
+
+            </div>
+
+            <div class="modal margin-medium padding-medium box-shadow">
+                <section id="header-image" class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="text-center">Immagine</th>
+                                <th>Nome</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                        @foreach (var contentImage in Model.HeaderImagesList)
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle text-center"><img src="@contentImage.FilePath" width="150" height="auto" /></td>
+                                    <td class="vertical-align-middle">@contentImage.Name</td>                
+                                    <td class="vertical-align-middle text-center"><input type="radio" asp-for="@Model.HeaderImageListSelected" id="@contentImage.Id" class="checkbox-menu box-shadow-small" value="@contentImage.Id" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="presentation-image" class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="text-center">Immagine</th>
+                                <th>Nome</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                        @foreach (var contentImage in Model.PresentationImagesList)
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle text-center"><img src="@contentImage.FilePath" width="150" height="auto" /></td>
+                                    <td class="vertical-align-middle">@contentImage.Name</td>                
+                                    <td class="vertical-align-middle text-center"><input type="radio" asp-for="@Model.PresentationImageListSelected" id="@contentImage.Id" class="checkbox-menu box-shadow-small" value="@contentImage.Id" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+                
+                <div class="display-flex flex-direction-column align-items-center justify-content-space-around margin-top-medium">
+                    <span class="btn btn-submit btn-close-modal background-color-black color-white text-center box-shadow ">Chiudi</span>
+                </div>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around margin-top-medium">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+
+        </form>
+    </section>
+
+        
+</div>
+

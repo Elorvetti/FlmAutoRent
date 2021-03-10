@@ -1,0 +1,12 @@
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\bin\Debug\netcoreapp3.0\FlmAutoRent.Services.deps.json
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\bin\Debug\netcoreapp3.0\FlmAutoRent.Services.dll
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\bin\Debug\netcoreapp3.0\FlmAutoRent.Services.pdb
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\bin\Debug\netcoreapp3.0\FlmAutoRent.Data.dll
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\bin\Debug\netcoreapp3.0\FlmAutoRent.Data.pdb
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.csprojAssemblyReference.cache
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.AssemblyInfoInputs.cache
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.AssemblyInfo.cs
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.csproj.CopyComplete
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.dll
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.pdb
+C:\Users\Elorvetti\Desktop\work\FlmAutoRent\FlmAutoRent.Services\obj\Debug\netcoreapp3.0\FlmAutoRent.Services.csproj.CoreCompileInputs.cache

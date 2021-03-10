@@ -1,0 +1,68 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model FileAddViewModel;
+
+<div class="padding-small">
+    <h1>Video</h1>
+
+    <section>
+        <form method="POST" enctype="multipart/form-data" asp-area="Admin" asp-controller="Content" asp-action="VideosAddOrEdit" >
+            <input type="hidden" ap-for="@Model.Id" value="@Model.Id" />
+            
+            @if(Model.Id == 0){
+                <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                    <section class="padding-xsmall border-bottom-grey background-color-white">
+                        <h3 class="padding-left-xsmall">Upload</h3>
+                    </section>
+                    <section class="padding-xsmall display-flex flex-direction-column">
+                        <section class="padding-left-xsmall display-flex flex-direction-column">
+                            <section class="display-flex flex-direction-column margin-xsmall border-grey-medium uploader">
+                                <label asp-for="@Model.Upload" class="padding-left-xsmall color-blue line-height-35 text-center"></label>
+                                <span class="material-icons color-grey margin-top-xsmall text-center">cloud_upload</span>
+                                <input asp-for="@Model.Upload" type="file" class="form-control video" />
+                                <span asp-validation-for="@Model.Upload" class="text-danger"></span>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+            }
+
+            <div id="preview" class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Anteprima video</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <section class="padding-left-xsmall display-flex flex-direction-column">
+                            <video width="100%" height="auto" controls>
+                                <source src="@Model.FilePath" >
+                            </video>
+                    </section>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Informazioni</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <section class="padding-left-xsmall display-flex flex-direction-column">
+                        @Html.LabelFor(m => m.Title)
+                        @Html.TextBoxFor(m => m.Title, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                        <span asp-validation-for="@Model.Title" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+
+                    <section class="margin-top-xsmall padding-left-xsmall display-flex flex-direction-column">
+                        @Html.LabelFor(m => m.Description)
+                        @Html.TextAreaFor(m => m.Description, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                        <span asp-validation-for="@Model.Description" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                    
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+            
+        </form>
+    </section>
+</div>

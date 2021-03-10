@@ -1,0 +1,234 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model NewsAddViewModel;
+
+<div class="padding-small">
+    <h1>Notizia</h1>
+
+    <section>
+        <form method="POST" enctype="multipart/form-data" asp-area="Admin" asp-controller="Content" asp-action="NewsAddOrEdit" >
+            <input type="hidden" ap-for="@Model.Id" value="@Model.Id" />
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Dati Notizia</h3>
+                </section>
+                
+                <section class="padding-xsmall display-flex flex-direction-column justify-content-space-around">
+                    
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="display-flex flex-direction-row align-items-center border-grey background-color-white width-1-2 margin-right-xsmall">
+                            <section class="display-flex flex-direction-row align-items-center padding-small">
+                                <input type="checkbox" asp-for="@Model.DisplayNews" class="checkbox-menu margin-right-xsmall" />
+                                @Html.LabelFor(m => m.DisplayNews)
+                            </section>
+                        </section>
+
+                        <section class="display-flex flex-direction-row align-items-center border-grey background-color-white width-1-2">
+                            <section class="display-flex flex-direction-row align-items-center padding-small">
+                                <input type="checkbox" asp-for="@Model.DisplayOnFooter" class="checkbox-menu margin-right-xsmall" />
+                                @Html.LabelFor(m => m.DisplayOnFooter)
+                            </section>
+                        </section>
+                    </section>
+                    
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.Title)
+                            @Html.TextBoxFor(m => m.Title, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.Title" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.SubTitle)
+                            @Html.TextBoxFor(m => m.SubTitle, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.SubTitle" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    </section>
+
+                    <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall margin-bottom-xsmall">
+                        @Html.LabelFor(m => m.Summary)
+                        @Html.TextAreaFor(m => m.Summary, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                        <span asp-validation-for="@Model.Summary" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Categoria</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                            @foreach (var category in Model.Categories.Where(x => x.IdFather == 0))
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle">@category.Name</td>                
+                                    <td class="vertical-align-middle text-center">
+                                        <input type="radio" asp-for="@Model.CategorySelected" id="@category.Id" class="checkbox-menu box-shadow-small" value="@category.Id" />
+                                    </td>
+                                </tr>
+                                @foreach (var categoryc in Model.Categories.Where(x => x.IdFather == category.Id))
+                                {
+                                    <tr>
+                                        <td class="vertical-align-middle">@string.Concat(category.Name, " - " , categoryc.Name)</td>                
+                                        <td class="vertical-align-middle text-center">
+                                            <input type="radio" asp-for="@Model.CategorySelected" id="@categoryc.Id" class="checkbox-menu box-shadow-small" value="@categoryc.Id" />
+                                        </td>
+                                    </tr>     
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Contenuto</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-row">
+                    <section class="padding-xsmall display-flex flex-direction-column width-1-1">
+                        @Html.LabelFor(m => m.News)
+                        <textarea asp-for="@Model.News" class="margin-top-xsmall addSummerNote" placeholder="..." autocomplete="off"></textarea>
+                    </section>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Immagini</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th class="text-center">Immagine</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                            @for(var i = 0; i < Model.ImagesList.Count(); i++)
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle">@Model.ImagesList[i].Name</td>                
+                                    <td class="vertical-align-middle text-center"><img src="@Model.ImagesList[i].FilePath" width="150" height="auto" /></td>
+                                    <td class="vertical-align-middle text-center">
+                                        <input type="checkbox" asp-for="@Model.ImagesList[i].Selected" id="@Model.ImagesList[i].Id" class="checkbox-menu box-shadow-small"  />
+                                        <input type="hidden" asp-for="@Model.ImagesList[i].Id" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Video</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                            @for(var i = 0; i < Model.VideoList.Count(); i++)
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle">@Model.VideoList[i].Name</td>                
+                                    <td class="vertical-align-middle text-center">
+                                        <input type="checkbox" asp-for="@Model.VideoList[i].Selected" id="@Model.VideoList[i].Id" class="checkbox-menu box-shadow-small" />
+                                        <input type="hidden" asp-for="@Model.VideoList[i].Id" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Allegati</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                            @for(var i = 0; i < Model.AttachmentList.Count(); i++)
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle">@Model.AttachmentList[i].Name</td>                
+                                    <td class="vertical-align-middle text-center">
+                                        <input type="checkbox" asp-for="@Model.AttachmentList[i].Selected" id="@Model.AttachmentList[i].Id" class="checkbox-menu box-shadow-small" />
+                                        <input type="hidden" asp-for="@Model.AttachmentList[i].Id" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">SEO</h3>
+                </section>
+                
+                <section class="padding-xsmall display-flex flex-direction-column justify-content-space-around">
+                    
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.MetaTitle)
+                            @Html.TextBoxFor(m => m.MetaTitle, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.MetaTitle" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.MetaDescription)
+                            @Html.TextBoxFor(m => m.MetaDescription, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.MetaDescription" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    </section>
+                    
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.PermaLink)
+                            @Html.TextBoxFor(m => m.PermaLink, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.PermaLink" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.SeoIndex)
+                            <select asp-for="SeoIndexId" asp-items="Model.SeoIndex" class="select-provider margin-top-xsmall"></select>
+                        </section>
+                    </section>
+
+                    
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+            
+        </form>
+    </section>
+</div>

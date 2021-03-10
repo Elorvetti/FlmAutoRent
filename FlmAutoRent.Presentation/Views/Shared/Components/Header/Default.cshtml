@@ -1,0 +1,24 @@
+@using FlmAutoRent.Presentation.Models;
+@model HomepageViewModel;
+
+<header>
+    <section id="header" class="display-flex flex-direction-column background-image background-image-cover min-height" style="background-image: url(@Model.ContentImageHeader)">
+        <section class="display-flex flex-direction-row justify-content-space-around width-1-1 menu-container">
+            <a href="/"><img width="200" height="auto" src="/upload/logo.png" alt="logo"></a>
+            <section class="display-flex flex-direction-row width-1-1 justify-content-flex-end">
+                <span class="display-flex flex-direction-column justify-content-center color-white text-right margin-xsmall btn-menu font-size-32 material-icons">menu</span>
+            </section>
+        </section>
+        <ul class="display-flex flex-direction-row justify-content-space-around width-1-1 menu-list">
+            <li class="dispaly-flex color-white font-size-20 font-weight-500 menu-items"><a href="/"><img width="200" height="auto" src="/upload/logo.png" alt="logo"></a></li>   
+            @foreach (var category in Model.ContentCategories)
+            {
+                <li class="display-flex flex-direction-column justify-content-center color-white font-size-20 font-weight-500 menu-items"><a href="@string.Concat('/', category.PermaLink)" class="display-flex flex-direction-column justify-content-center color-white">@category.Name</a></li>   
+            }
+        </ul>
+        <section class="display-flex flex-direction-column justify-content-center margin-left-small margin-right-small margin-top-large text-center z-index-9996 height-400">
+            @Html.Raw(Model.WelcomeMessage)
+        </section>
+        <span class="divider"></span>
+    </section>
+</header>

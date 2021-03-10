@@ -1,0 +1,86 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model CategoryAddViewModel;
+
+<div class="padding-small">
+    @if(Model.Id != 0){
+        <h1>@Model.Name</h1>
+    } else {
+        <h1>Aggiungi Categoria</h1>
+    }
+
+    <section>
+        <form method="POST" asp-area="Admin" asp-controller="Content" asp-action="CategoryAddOrEdit" >
+            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+            <input type="hidden" asp-for="@Model.IdFather" value="@Model.IdFather" />
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Categoria</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <section class="padding-left-xsmall display-flex flex-direction-column">
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                        <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+                    
+                    <section class="margin-top-xsmall padding-left-xsmall display-flex flex-direction-column">
+                        @Html.LabelFor(m => m.Description)
+                        <textarea asp-for="@Model.Description" class="margin-top-xsmall addSummerNote" placeholder="..." autocomplete="off"></textarea>
+                        <span asp-validation-for="@Model.Description" class="padding-left-xsmall color-red font-weight-600"></span>
+                    </section>
+
+                    <section class="padding-top-xsmall padding-bottom-xsmall display-flex flex-direction-row">
+                        
+                        <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column margin-top-xsmall width-1-2">
+                            <section class="display-flex flex-direction-row padding-left-xsmall padding-right-xsmall align-items-center background-color-white border-grey-medium margin-top-small">
+                                <input type="checkbox" asp-for="@Model.DisplayRef" id="@Model.Display" class="checkbox-menu" />
+                                <label for="@Model.Display" class="padding-left-xsmall color-blue line-height-35">Pubblico</label>
+                                <input type="hidden" asp-for="@Model.Display" />
+                            </section>
+                        </section>
+
+                        <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.Priority)
+                            @Html.TextBoxFor(m => m.Priority, new { @class="margin-top-xsmall" , @autocomplete="off" })
+                        </section>
+
+                    </section>
+
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Immagine</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="text-center">Immagine</th>
+                                <th>Nome</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                        @foreach (var contentImage in Model.ImagesList)
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle text-center"><img src="@contentImage.FilePath" width="150" height="auto" /></td>
+                                    <td class="vertical-align-middle">@contentImage.Name</td>                
+                                    <td class="vertical-align-middle text-center"><input type="radio" asp-for="@Model.ImageListSelected" id="@contentImage.Id" class="checkbox-menu box-shadow-small" value="@contentImage.Id" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+      
+        </form>
+    </section>
+</div>
+

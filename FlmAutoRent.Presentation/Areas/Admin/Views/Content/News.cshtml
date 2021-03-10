@@ -1,0 +1,50 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model NewsTableViewModel;
+
+
+<div class="padding-small">
+    <h1>Notizie</h1>
+
+    <section class="border-grey box-shadow">
+        <form id="table-groups" method="post" action="/Content/News">
+            <div class="padding-small display-flex border-bottom-grey background-color-white">
+                <section class="table-header display-flex flex-direction-column flex-direction-row-d justify-content-flex-start flex-grow-2 max-width-100">
+                    <select id="how-many-fields" asp-for="HowManyField" asp-items="@(new SelectList(Model.HowManyFieldList, "Value", "DisplayText"))"></select>
+                    
+                    <section class="display-flex justify-content-space-around margin-top-xsmall-m justify-content-flex-end-d flex-grow-2">
+                        <input id="find" class="flex-grow-5-m" asp-for="@Model.Find" placeholder="Cerca..." autocomplete="off" />
+                        <a class="btn line-height-35 background-color-blue color-white margin-left-xsmall padding-left-small padding-right-small box-shadow" asp-area="Admin" asp-controller="Content" asp-action="NewsAddOrEdit">Aggiungi</a>
+                    </section>
+                </section>
+            </div>
+            <div class="display-flex padding-small overflow-x-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Titolo</th>
+                            <th>Categoria</th>
+                            <th>Data</th>
+                            <th class="text-center">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var news in Model.NewsListViewModel)
+                        {
+                            <tr>
+                                <td>@news.Title</td>
+                                <td>@news.Category</td>
+                                <td>@news.PublicDate</td>
+                                <td class="text-center">
+                                    <a class="btn background-color-blue color-white font-size-14 padding-left-small padding-right-small vertical-align-middle box-shadow" asp-area="Admin" asp-controller="Content" asp-action="NewsAddOrEdit" asp-route-id="@news.Id">Modifica</a>
+                                    <input type="button" class="btn background-color-red color-white font-size-14 padding-left-small padding-right-small vertical-align-middle delete news-delete box-shadow" id="@news.Id" value="Elimina"/>
+                                </td>
+                            </tr>
+                        }
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </form>
+    </section>
+</div>

@@ -1,0 +1,160 @@
+@using FlmAutoRent.Presentation.Areas.Admin.Models;
+@model CarAddViewModel;
+
+<div class="padding-small">
+    <div class="display-flex flex-direction-row justify-content-flex-end">
+        <h1 class="width-1-1">Veicolo</h1>
+        <section class="display-flex flex-direction-row justify-content-flex-end">
+            <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall active">1<a href="#"><p>Generale</p></a></span>
+            @if(Model.disableSecondStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">2<a href="#"><p>Carica<br />Immagini</p></a></span>    
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">3<a href="#"><p>Visualizza<br />Immagini</p></a></span>    
+            } else {
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">2<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsSecondStep" asp-route-id="@Model.Id"><p>Immagini</p></a></span>
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">3<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsSecondStepMenage" asp-route-id="@Model.Id"><p>Visualizza<br />Immagini</p></a></span>
+            }
+
+            @if(Model.disableThirdStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">4<a href="#"><p>Seo</p></a></span>
+            }else{
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">4<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsThirdStep" asp-route-id="@Model.Id"><p>Seo</p></a></span>
+            }
+
+            @if(Model.disableFourStep){
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall disabled">5<a href="#"><p>Contatti</p></a></span>
+            } else {
+                <span class="step color-white box-shadow text-center margin-left-xsmall margin-right-xsmall">5<a asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFourStep" asp-route-id="@Model.Id"><p>Contatti</p></a></span>
+            }
+            
+            
+        </section>
+    </div>
+
+    <section class="margin-top-small">
+        <form method="POST" asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFirstStep" >
+            <input type="hidden" ap-for="@Model.Id" value="@Model.Id" />
+
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Categoria</h3>
+                </section>
+                <section class="padding-xsmall display-flex flex-direction-column">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th class="text-center">Selezionata</th>
+                            </tr>
+                        </thead>
+                        <tbody>                       
+                            @foreach (var category in Model.carFirstStep.Categories.Where(x => x.IdFather == 0))
+                            {              
+                                <tr>
+                                    <td class="vertical-align-middle">@category.Name</td>                
+                                    <td class="vertical-align-middle text-center">
+                                        <input type="radio" asp-for="@Model.carFirstStep.CategorySelected" id="@category.Id" class="checkbox-menu box-shadow-small" value="@category.Id" />
+                                    </td>
+                                </tr>
+                                @foreach (var categoryc in Model.carFirstStep.Categories.Where(x => x.IdFather == category.Id))
+                                {
+                                    <tr>
+                                        <td class="vertical-align-middle">@string.Concat(category.Name, " - " , categoryc.Name)</td>                
+                                        <td class="vertical-align-middle text-center">
+                                            <input type="radio" asp-for="@Model.carFirstStep.CategorySelected" id="@categoryc.Id" class="checkbox-menu box-shadow-small" value="@categoryc.Id" />
+                                        </td>
+                                    </tr>     
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+
+            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+                <section class="padding-xsmall border-bottom-grey background-color-white">
+                    <h3 class="padding-left-xsmall">Dati veicolo</h3>
+                </section>
+                
+                <section class="padding-xsmall display-flex flex-direction-column justify-content-space-around">
+                    
+                   
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.carFirstStep.BrandList)
+                            <select asp-for="carFirstStep.BrandId" asp-items="Model.carFirstStep.BrandList" class="select-provider margin-top-xsmall"></select>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
+                            @Html.LabelFor(m => m.carFirstStep.PowerSupplyList)
+                            <select asp-for="carFirstStep.PowerSupplyId" asp-items="Model.carFirstStep.PowerSupplyList" class="select-provider margin-top-xsmall"></select>
+                        </section>
+                    </section>
+
+                    <section class="display-flex flex-direction-column justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column">
+                            @Html.LabelFor(m => m.carFirstStep.Model)
+                            @Html.TextBoxFor(m => m.carFirstStep.Model, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.carFirstStep.Model" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    </section>
+
+                    <section class="display-flex flex-direction-column justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column">
+                            @Html.LabelFor(m => m.carFirstStep.Description)
+                            @Html.TextAreaFor(m => m.carFirstStep.Description, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.carFirstStep.Description" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+                    </section>
+
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1">
+                            @Html.LabelFor(m => m.carFirstStep.CV)
+                            @Html.TextBoxFor(m => m.carFirstStep.CV, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.carFirstStep.CV" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1">
+                            @Html.LabelFor(m => m.carFirstStep.KW)
+                            @Html.TextBoxFor(m => m.carFirstStep.KW, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.carFirstStep.KW" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall">
+                            <section class="display-flex flex-direction-row padding-left-xsmall padding-right-xsmall align-items-center background-color-white border-grey-medium margin-top-small">
+                                <input type="checkbox" asp-for="@Model.carFirstStep.Bookable" class="checkbox-menu margin-right-xsmall" />
+                                <label for="@Model.carFirstStep.Bookable" class="padding-left-xsmall color-blue line-height-35">Prenotabile</label>
+                                <input type="hidden" asp-for="@Model.carFirstStep.Bookable" />
+                            </section>
+                        </section>
+
+                    </section>
+
+                    <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1">
+                            @Html.LabelFor(m => m.carFirstStep.Priority)
+                            @Html.TextBoxFor(m => m.carFirstStep.Priority, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                            <span asp-validation-for="@Model.carFirstStep.Priority" class="padding-left-xsmall color-red font-weight-600"></span>
+                        </section>
+
+                        <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall">
+                            <section class="display-flex flex-direction-row padding-left-xsmall padding-right-xsmall align-items-center background-color-white border-grey-medium margin-top-small">
+                                <input type="checkbox" asp-for="@Model.carFirstStep.DisplayHp" class="checkbox-menu margin-right-xsmall" />
+                                <label for="@Model.carFirstStep.DisplayHp" class="padding-left-xsmall color-blue line-height-35">Visualizza in Home Page</label>
+                                <input type="hidden" asp-for="@Model.carFirstStep.DisplayHp" />
+                            </section>
+                        </section>
+
+                     </section>
+              
+                </section>
+            </div>
+
+            <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
+                <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
+            </div>
+            
+        </form>
+    </section>
+</div>
