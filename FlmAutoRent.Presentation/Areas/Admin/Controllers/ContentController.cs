@@ -49,6 +49,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }   
 
         public IActionResult Category(){
+             
             var model = new CategoryViewModel();
             
             var categories = _categoryService.GetCategories();
@@ -61,6 +62,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult CategoryAddOrEdit(int id, int idFather = 0){
+            ViewData["Title"] = "Aggiungi Categoria";
             var model = new CategoryAddViewModel();
                         
             model.IdFather = idFather;
@@ -178,6 +180,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
     
         public IActionResult Images(){
+            ViewData["Title"] = "Immagini";
             var model = new FilesTableViewModel();
 
             model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
@@ -202,6 +205,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
     
         public IActionResult ImagesAddOrEdit(int id){
+            ViewData["Title"] = "Aggiungi Immagine";
             var model = new FileAddViewModel();
 
             if(id != 0){
@@ -277,6 +281,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult Videos(){
+            ViewData["Title"] = "Video";
             var model = new FilesTableViewModel();
 
             model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
@@ -300,6 +305,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
     
         public IActionResult VideosAddOrEdit(int id){
+            ViewData["Title"] = "Aggiungi Video";
             var model = new FileAddViewModel();
 
             if(id != 0){
@@ -376,6 +382,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult Attachments(){
+            ViewData["Title"] = "Allegati";
             var model = new FilesTableViewModel();
 
             model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
@@ -399,6 +406,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
     
         public IActionResult AttachmentsAddOrEdit(int id){
+            ViewData["Title"] = "Aggiungi Allegato";
             var model = new FileAddViewModel();
 
             if(id != 0){
@@ -477,6 +485,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult News(){
+            ViewData["Title"] = "Notizie";
             var model = new NewsTableViewModel();
 
             model.HowManyFieldList = new List<NewsTableViewModel.HowManyFields>{
@@ -500,6 +509,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
         
         public IActionResult NewsAddOrEdit(int Id){
+            ViewData["Title"] = "Aggiungi Notizie";
             var model = new NewsAddViewModel();
             
             //GET CATEGORY 
@@ -765,6 +775,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult Homepage(){
+            ViewData["Title"] = "Gestione Homepage";
             var model = new HomepageViewModel();
             
             var vehicles = _homepageService.GetVehicles();

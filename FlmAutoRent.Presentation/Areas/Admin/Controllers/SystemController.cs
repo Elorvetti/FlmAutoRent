@@ -38,6 +38,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Groups");
         }
         public IActionResult Groups(){
+            ViewData["Title"] = "Gruppi";
             var model = new GroupsTableViewModel();
 
             model.HowManyFieldList = new List<GroupsTableViewModel.HowManyFields>{
@@ -64,6 +65,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult GroupsAddOrEdit(int Id){
+            ViewData["Title"] = "Aggiungi Gruppo";
             var model = new GroupAddViewModel();
             
             if(Id != 0){
@@ -182,6 +184,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult Emails(){
+            ViewData["Title"] = "Account Email";
             var model = new EmailsTableViewModel();
 
             model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
@@ -210,6 +213,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult EmailsAddOrEdit(int Id){
+             ViewData["Title"] = "Aggiungi Account Email";
             var model = new EmailAddViewModel();
             
             if(Id != 0){
@@ -293,6 +297,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
         
         public IActionResult Operators(){
+             ViewData["Title"] = "Operatori";
             var model = new OperatorsTableViewModel();
 
             model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
@@ -322,6 +327,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult OperatorsAddOrEdit(int Id){
+             ViewData["Title"] = "Aggiungi Operatori";
             var model = new OperatorAddViewModel();
             
             if(Id != 0){
@@ -413,7 +419,9 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 
                 //CHECK EMAIL AND USERID IS NOT USED 
                 if(_operatorServices.ExistOperator(model.UserId, model.EmailAddress)){
-                    return PartialView("_ErrorPartialView");
+                    var errorViewModel = new ErrorViewModel();
+                    errorViewModel.Error = "Email o UserID Presenti";
+                    return View("500", errorViewModel);
                 }
 
                 // INSERT OPERATOR

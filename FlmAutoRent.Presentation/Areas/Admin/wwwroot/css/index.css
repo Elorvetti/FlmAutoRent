@@ -271,7 +271,8 @@ div#sidebar li.accordion > ul { max-height: 0; transition: max-height 0.3s ease-
 div#sidebar li.accordion > ul.open { max-height: 300px; transition: max-height 0.3s ease-out;  height:auto;  }
 
 /* MODAL */
-div.modal{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; }
+div.modal{ display: none; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; }
+div.modal.active{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #fff; overflow-y: scroll; z-index: 99999; }
 div.modal.overlay{ background-color: rgba(0, 0, 0, .8); }
 div.modal > section#modal-content{ min-width: 600px; min-height: 300px; }
 

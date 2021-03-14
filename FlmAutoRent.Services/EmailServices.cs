@@ -105,7 +105,6 @@ namespace FlmAutoRent.Services
             mailMessage.IsBodyHtml = true;
             mailMessage.Subject = EmailObject;
 
-
             //Configure Client
             SmtpClient client = new SmtpClient("smtp.gmail.com");
             client.Port = 587;

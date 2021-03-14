@@ -302,19 +302,31 @@ p.vehicle-description{ margin-top: 30px; }
 form.contact{ margin-left: 0; margin-right: 0; }
 section#header section p{ z-index: 9998; font-weight: 500; font-size: 32px; line-height: 40px; }
 
-div.owl-stage div.owl-item{ max-width: 300px; opacity: .3; }
+div.owl-stage div.owl-item{ opacity: .15; }
 div.owl-stage div.owl-item.active{ opacity: 1; }
 
 .z-index-9996{ z-index: 9996; }
 .height-400{ height: 400px; }
 .max-width-1200{ max-width: 1200px; margin: 0 auto; }
 
+div.owl-nav button{ position: absolute; top: 30%; width: 40px; height: 40px; border-radius: 50%; background-color: #fff!important; z-index: 9996; }
+div.owl-nav button.owl-prev{ left: 10px; }
+div.owl-nav button.owl-next{ right: 10px; }
+div.owl-nav button.disabled{ display: none; }
+div.owl-nav button > span{ display: inline-block; width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12); font-size: 42px; line-height: 34px; text-align: center;  }  
+
+div.owl-dots{ position: relative; margin-top: 40px; text-align: center; }
+div.owl-dots button.owl-dot{ width: 20px; height: 20px; margin: 0 5px; border-radius: 50%; box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12); }
+div.owl-dots button.owl-dot.active{ background-color: #bdc3c7; }
+
+section.vehicle-data > p + p{ font-size: 18px; line-height: 23px; }
+
 @media(min-width: 768px){
     section.footer section{ margin-bottom: 20px; }
     section.footer section{ margin-bottom: 10px; }
     form.contact{ margin-left: 50px; margin-right: 50px; }
 
-    div.owl-stage div.owl-item{ max-width: unset; opacity: 1; }
+    div.owl-stage div.owl-item{ max-width: unset; }
 }
 
 @media(max-width: 1023px){
@@ -350,15 +362,19 @@ div.owl-stage div.owl-item.active{ opacity: 1; }
     span.divider{ top: 735px; }
     section.menu-container{ display: none; }
     section.card{ min-width: 500px; max-width: 500px; }
-    section.card section.background-image{ height: 320px; border-radius: 30px; }
-    section.card section.vehicle-data{ margin-left: 50px; margin-right: 50px;border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+    section.card section.background-image{ height: 320px; border-radius: 15px; }
+    section.card section.vehicle-data{ margin-left: 50px; margin-right: 50px;border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; }
     section.card a.btn{left: 100px; right: 100px; }
-    section.noleggio{ flex-direction: row; }
+    section.noleggio{ flex-direction: row; margin: 10px 90px; }
     section.noleggio section{ height: 400px; }
     section.footer{ flex-direction: row; }
     .flex-direction-row-d{ flex-direction: row; }
     .width-1-2-d{ width: 50%; }
     ul.menu-list.fixed{ position: fixed; margin-top: 0; background-color: #000; box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12); -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12); -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12); z-index: 9997; }
+    section.text-page, section.car-details{ padding: 0 100px; }
+    section.vehicle-data > p + p{ font-size: 22px; line-height: 33px; }
+    div.owl-nav button.owl-prev{ left: 20px; }
+    div.owl-nav button.owl-next{ right: 20px; }
 }
 
 textarea{ max-width: 100%; }

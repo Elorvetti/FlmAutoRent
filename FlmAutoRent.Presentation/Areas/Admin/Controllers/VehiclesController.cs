@@ -45,6 +45,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult Brands(){
+            ViewData["Title"] = "Brand";
             var model = new BrandsTableViewModel();
 
             model.HowManyFieldList = new List<BrandsTableViewModel.HowManyFields>{
@@ -70,6 +71,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult BrandsAddOrEdit(int id){
+            ViewData["Title"] = "Aggiungi Brand";
             var model = new BrandAddViewModel();
 
             //SEO
@@ -191,6 +193,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult Cars(){
+            ViewData["Title"] = "Veicoli";
             var model = new CarsTableViewModel();
 
             model.HowManyFieldList = new List<CarsTableViewModel.HowManyFields>{
@@ -217,6 +220,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
     
         public IActionResult CarsFirstStep(int id){
+            ViewData["Title"] = "Aggiungi Veicolo";
             var model = new CarAddViewModel();
             
             //GET CATEGORY 
@@ -332,6 +336,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult CarsSecondStep(int id, int imageId){
+            ViewData["Title"] = "Aggiungi Veicolo";
             var model = new CarAddViewModel();
             
             model.Id = id;
@@ -426,6 +431,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult CarsSecondStepMenage(int id){
+            ViewData["Title"] = "Aggiungi Veicolo";
             var model = new CarAddViewModel();
             
             model.Id = id;
@@ -459,6 +465,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult CarsThirdStep(int id){
+            ViewData["Title"] = "Aggiungi Veicolo";
             var model = new CarAddViewModel();
             
             //SEO
@@ -507,6 +514,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         
 
         public IActionResult CarsFourStep(int id){
+            ViewData["Title"] = "Aggiungi Veicolo";
             var model = new CarAddViewModel();
             
             model.Id = id;

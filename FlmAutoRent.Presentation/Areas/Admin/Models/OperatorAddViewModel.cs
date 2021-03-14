@@ -67,4 +67,10 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
     {
         public bool Active{ get; set; }
     }
+
+    public class ErrorViewModel 
+    {
+        public string Error { get; set; }
+    }
+
 }

@@ -8,16 +8,16 @@
                     loop: false,
                     margin: 20,
                     items: 1,
-                    nav: false,
+                    nav: true,
                     dots: true,
                     dotsEach: 1, 
-                    stagePadding: 10
+                    stagePadding: 50
                 },
                 768:{
                     loop: false,
                     margin: 20,
                     items: 2,
-                    nav: false,
+                    nav: true,
                     dots: true,
                     dotsEach: 2, 
                     stagePadding: 20
@@ -26,17 +26,17 @@
                     loop: false,
                     margin: 60,
                     items: 2,
-                    nav: false,
+                    nav: true,
                     dotsEach: 3, 
-                    stagePadding: 10
+                    stagePadding: 30
                 },
                 1440:{
                     loop: false,
-                    margin: 60,
+                    margin: 10,
                     items: 3,
-                    nav: false,
+                    nav: true,
                     dotsEach: 3, 
-                    stagePadding: 10
+                    stagePadding: 80
                 },
             }
         })
