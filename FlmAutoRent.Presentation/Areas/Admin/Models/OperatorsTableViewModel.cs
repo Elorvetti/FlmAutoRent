@@ -20,6 +20,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
         public string EmailAddress { get; set; }
         public string PhoneNr { get; set; }
         public string Group { get; set; }
-        public int Enabled { get; set; }
+        public string Enabled { get; set; }
     }
 }

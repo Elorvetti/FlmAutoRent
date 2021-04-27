@@ -18,7 +18,8 @@ namespace FlmAutoRent.Services
         bool ExistOperator(string userdId, string email);
         bool LoginOperatorSuccess(string userId, string password);
         ProfilingOperator LoginOperator(string userId, string password);
-        IList<ProfilingOperator> GetOperators();
+        IList<ProfilingOperator> GetOperators(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<ProfilingOperator> GetOperatorsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         IList<ProfilingGroup> GetListGroup();
         IList<SystemEmail> GetListEmailAccount();
         SystemEmail GetListEmailAccountById(int id);
@@ -29,7 +30,7 @@ namespace FlmAutoRent.Services
         void DeleteOperator(int Id);
         void InsertProfilingOperatorGroup(ProfilingOperatorGroup model);
         void UpdateProfilingOperatorGroup(ProfilingOperatorGroup model);
-        void DeleteProfilingOperatorGroup(ProfilingOperatorGroup model);        
+        void DeleteProfilingOperatorGroup(int ProfilingOperatorId);        
         void InsertProfilingOperatorEmail(ProfilingOperatorEmail model);
         void DeleteProfilingOperatorEmail(int ProfilingOperatorId);
         void UpdateProfilingOperatorPassword(Guid AccountGuid, string Password);
@@ -73,9 +74,13 @@ namespace FlmAutoRent.Services
             return _ctx.ProfilingOperators.Include(x => x.ProfilingOperatorGroups).ThenInclude(x => x.Groups).FirstOrDefault(x => x.UserId == userId || x.Password == password);
         }
 
-        public virtual IList<ProfilingOperator> GetOperators(){
-            return _ctx.ProfilingOperators.Include(x => x.ProfilingOperatorGroups).ThenInclude(x => x.Groups).ToList();
+        public virtual IList<ProfilingOperator> GetOperators(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ProfilingOperators.Include(x => x.ProfilingOperatorGroups).ThenInclude(x => x.Groups).Skip(excludeRecord).Take(pageSize).ToList();
         }   
+
+        public virtual IList<ProfilingOperator> GetOperatorsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ProfilingOperators.Include(x => x.ProfilingOperatorGroups).ThenInclude(x => x.Groups).Where( x => EF.Functions.Like(x.Lastname, string.Concat("%", find, "%")) || EF.Functions.Like(x.Name, string.Concat("%", find, "%")) || EF.Functions.Like(x.Email, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).ToList();
+        }
 
         public virtual IList<ProfilingGroup> GetListGroup(){
             return _ctx.ProfilingGroups.ToList();
@@ -134,8 +139,8 @@ namespace FlmAutoRent.Services
             _ctx.SaveChanges();
         }
 
-        public void DeleteProfilingOperatorGroup(ProfilingOperatorGroup model){
-            var profilingOperatorGroup = _ctx.ProfilingOperatorGroups.Where(x => x.Id == model.Id);
+        public void DeleteProfilingOperatorGroup(int ProfilingOperatorId){
+            var profilingOperatorGroup = _ctx.ProfilingOperatorGroups.Where(x => x.Operators.Id == ProfilingOperatorId);
             _ctx.ProfilingOperatorGroups.RemoveRange(profilingOperatorGroup);
 
             _ctx.SaveChanges();

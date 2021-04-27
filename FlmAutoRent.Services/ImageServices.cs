@@ -13,7 +13,8 @@ namespace FlmAutoRent.Services
 {
     public interface IImageService
     {
-        IList<ContentImage> GetContentImages();
+        IList<ContentImage> GetContentImages(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<ContentImage> GetContentImagesByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         ContentImage GetContentImageById(int id);
         void InsertContentImage(ContentImage model);
         void UpdateContentImage(ContentImage model);
@@ -27,8 +28,12 @@ namespace FlmAutoRent.Services
             this._ctx = ctx;
         }
         
-        public IList<ContentImage> GetContentImages(){
-            return _ctx.ContentImages.Include(x => x.ContentCategoryImages).ThenInclude(x => x.Categories).ToList();
+        public IList<ContentImage> GetContentImages(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentImages.Include(x => x.ContentCategoryImages).ThenInclude(x => x.Categories).Skip(excludeRecord).Take(pageSize).ToList();
+        }
+
+        public IList<ContentImage> GetContentImagesByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentImages.Include(x => x.ContentCategoryImages).ThenInclude(x => x.Categories).Where(x => EF.Functions.Like(x.Title, string.Concat("%",find ,"%")) ).Skip(excludeRecord).Take(pageSize).ToList();
         }
 
         public ContentImage GetContentImageById(int id){

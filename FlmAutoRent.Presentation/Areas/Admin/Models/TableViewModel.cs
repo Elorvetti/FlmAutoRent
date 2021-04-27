@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FlmAutoRent.Presentation.Areas.Admin.Models
 {
-    public class TableViewModel
+    public class TableViewModel : PaginationViewModel
     {
         public TableViewModel(){
             HowManyFieldList = new List<HowManyFields>();

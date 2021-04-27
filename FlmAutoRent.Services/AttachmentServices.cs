@@ -13,7 +13,8 @@ namespace FlmAutoRent.Services
 {
     public interface IAttachmentService
     {
-        IList<ContentAttachment> GetContentAttachments();
+        IList<ContentAttachment> GetContentAttachments(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<ContentAttachment> GetContentAttachmentsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         ContentAttachment GetContentAttachmentById(int id);
         void InsertContentAttachment(ContentAttachment model);
         void UpdateContentAttachment(ContentAttachment model);
@@ -27,8 +28,12 @@ namespace FlmAutoRent.Services
             this._ctx = ctx;
         }
         
-        public IList<ContentAttachment> GetContentAttachments(){
-            return _ctx.ContentAttachments.ToList();
+        public IList<ContentAttachment> GetContentAttachments(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentAttachments.Skip(excludeRecord).Take(pageSize).ToList();
+        }
+
+        public IList<ContentAttachment> GetContentAttachmentsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentAttachments.Where( x => EF.Functions.Like(x.Title, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).ToList();
         }
 
         public ContentAttachment GetContentAttachmentById(int id){

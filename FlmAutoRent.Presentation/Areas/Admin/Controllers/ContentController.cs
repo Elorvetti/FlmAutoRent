@@ -179,10 +179,11 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Category");
         }
     
-        public IActionResult Images(){
+        public IActionResult Images(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Immagini";
             var model = new FilesTableViewModel();
 
+            model.HowManyField = pageSize;
             model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
                 new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
                 new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
@@ -190,7 +191,22 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var contentImages = _imagesService.GetContentImages();
+            //Pagination
+            model.totalRecords = _imagesService.GetContentImages().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var contentImages = _imagesService.GetContentImages(excludeRecords, pageSize);
             foreach(var contentImage in contentImages){
                 model.FilesListViewModel.Add(new FileViewModel{ 
                     Id = contentImage.Id, 
@@ -203,7 +219,47 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
 
             return View(model);
         }
-    
+
+        [HttpPost]
+        public IActionResult Images(FilesTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Immagini";
+
+            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
+                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+             //Pagination
+            model.totalRecords = _imagesService.GetContentImagesByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+
+            var contentImages = _imagesService.GetContentImagesByName(model.Find, excludeRecords, model.pageSize);
+            foreach(var contentImage in contentImages){
+                model.FilesListViewModel.Add(new FileViewModel{ 
+                    Id = contentImage.Id, 
+                    Name = contentImage.Title,
+                    FilePath = string.Format("/{0}", contentImage.FilePath.Replace("\\", "/")),
+                    Nusing = contentImage.ContentCategoryImages.Where(x => x.Images.Id == contentImage.Id).Count()
+                });        
+            }
+            
+
+            return View(model);
+        }
+
         public IActionResult ImagesAddOrEdit(int id){
             ViewData["Title"] = "Aggiungi Immagine";
             var model = new FileAddViewModel();
@@ -280,7 +336,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Images");
         }
 
-        public IActionResult Videos(){
+        public IActionResult Videos(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Video";
             var model = new FilesTableViewModel();
 
@@ -291,7 +347,61 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var contentVideos = _videosService.GetContentVideos();
+            //Pagination
+            model.totalRecords = _videosService.GetContentVideos().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var contentVideos = _videosService.GetContentVideos(excludeRecords, pageSize);
+            foreach(var contentVideo in contentVideos){
+                model.FilesListViewModel.Add(new FileViewModel{ 
+                    Id = contentVideo.Id, 
+                    Name = contentVideo.Title,
+                    FilePath = string.Format("/{0}", contentVideo.FilePath.Replace("\\", "/"))
+                });        
+            }
+            
+
+            return View(model);
+        }
+       
+        [HttpPost]
+        public IActionResult Videos(FilesTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Video";
+
+            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
+                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _videosService.GetContentVideosByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+
+            var contentVideos = _videosService.GetContentVideosByName(model.Find, excludeRecords, model.pageSize);
             foreach(var contentVideo in contentVideos){
                 model.FilesListViewModel.Add(new FileViewModel{ 
                     Id = contentVideo.Id, 
@@ -381,7 +491,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Videos");
         }
 
-        public IActionResult Attachments(){
+        public IActionResult Attachments(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Allegati";
             var model = new FilesTableViewModel();
 
@@ -392,7 +502,61 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var contentAttachments = _attachmentService.GetContentAttachments();
+            //Pagination
+            model.totalRecords = _attachmentService.GetContentAttachments().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var contentAttachments = _attachmentService.GetContentAttachments(excludeRecords, pageSize);
+            foreach(var contentAttachment in contentAttachments){
+                model.FilesListViewModel.Add(new FileViewModel{ 
+                    Id = contentAttachment.Id, 
+                    Name = contentAttachment.Title,
+                    FilePath = string.Format("/{0}", contentAttachment.FilePath.Replace("\\", "/")),
+                });        
+            }
+            
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Attachments(FilesTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Allegati";
+
+            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
+                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _attachmentService.GetContentAttachmentsByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+
+            var contentAttachments = _attachmentService.GetContentAttachmentsByName(model.Find, excludeRecords, model.pageSize);
             foreach(var contentAttachment in contentAttachments){
                 model.FilesListViewModel.Add(new FileViewModel{ 
                     Id = contentAttachment.Id, 
@@ -484,9 +648,49 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Attachments");
         }
 
-        public IActionResult News(){
+        public IActionResult News(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Notizie";
             var model = new NewsTableViewModel();
+
+            model.HowManyField = pageSize;
+            model.HowManyFieldList = new List<NewsTableViewModel.HowManyFields>{
+                new NewsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new NewsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new NewsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new NewsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _newsService.GetContentNews().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+            
+            var contentNews = _newsService.GetContentNews(excludeRecords, pageSize);
+            foreach(var news in contentNews){
+                model.NewsListViewModel.Add(new NewsViewModel {
+                    Id = news.Id,
+                    Category = news.ContentCategoryNews.Any() ? news.ContentCategoryNews.FirstOrDefault().ContentCategories.Name : "",
+                    PublicDate = news.OperatorData,
+                    Title = news.Title
+                });
+            }
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult News(NewsTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Notizie";
 
             model.HowManyFieldList = new List<NewsTableViewModel.HowManyFields>{
                 new NewsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
@@ -494,8 +698,23 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new NewsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
                 new NewsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
+
+            //Pagination
+            model.totalRecords = _newsService.GetContentNewsByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
             
-            var contentNews = _newsService.GetContentNews();
+            var contentNews = _newsService.GetContentNewsByName(model.Find, excludeRecords, model.pageSize);
             foreach(var news in contentNews){
                 model.NewsListViewModel.Add(new NewsViewModel {
                     Id = news.Id,

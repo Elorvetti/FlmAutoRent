@@ -47,7 +47,7 @@
                         <section class="display-flex flex-direction-row justify-content-space-around margin-top-xsmall margin-bottom-xsmall">
                             <section class="padding-left-xsmall display-flex flex-direction-column width-1-2">
                                 @Html.LabelFor(m => m.ContactModal.StartRent)
-                                <input asp-for="ContactModal.EndRent" type="date" asp-format="{0:dd-MM-yyyy}" class="margin-top-xsmall" autocomplete="off" />
+                                <input asp-for="ContactModal.StartRent" type="date" asp-format="{0:dd-MM-yyyy}" class="margin-top-xsmall" autocomplete="off" />
                                 <span asp-validation-for="@Model.ContactModal.StartRent" class="padding-left-xsmall color-red font-weight-600"></span>
                             </section>
                         

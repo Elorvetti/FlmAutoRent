@@ -31,7 +31,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
 
         [Required(ErrorMessage="Il campo è obbligatorio")]
         [MaxLength(250)]
-        [RegularExpression(@"^[a-zA-Z .]+$", ErrorMessage="Formato non valido")]
+        [RegularExpression(@"^[a-zA-Z 0-9 .]+$", ErrorMessage="Formato non valido")]
         [Display(Name="Indirizzo POP3")]
         public string EmailPop { get; set; }
 
@@ -41,7 +41,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
 
         [Required(ErrorMessage="Il campo è obbligatorio")]
         [MaxLength(250)]
-        [RegularExpression(@"^[a-zA-Z .]+$", ErrorMessage="Formato non valido")]
+        [RegularExpression(@"^[a-zA-Z 0-9 .]+$", ErrorMessage="Formato non valido")]
         [Display(Name="Indirizzo SMTP")]
         public string EmailSmtp { get; set; }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -20,7 +21,8 @@ namespace FlmAutoRent.Services
         IList<ProfilingSystemMenu> GetSystemMenus(string userId = null);
         IList<ProfilingSystemMenu> GetSystemMenusHeader(string userId = null);
         IList<ProfilingSystemMenu> GetSystemMenusAside(string path, string userId = null);
-        IList<ProfilingGroup> GetProfilingGroups();
+        IList<ProfilingGroup> GetProfilingGroups(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<ProfilingGroup> GetProfilingGroupsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         ProfilingGroup GetProfilingGroupById(int id);
 
         //CRUD
@@ -93,9 +95,13 @@ namespace FlmAutoRent.Services
             return _ctx.ProfilingSystemMenus.Where(am => am.MenuFatherId == fatherId).OrderBy(x => x.Priority).ToList();
         }        
 
-        public virtual IList<ProfilingGroup> GetProfilingGroups(){
-            return _ctx.ProfilingGroups.Include(x => x.ProfilingOperatorGroups).ToList();
+        public virtual IList<ProfilingGroup> GetProfilingGroups(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ProfilingGroups.Include(x => x.ProfilingOperatorGroups).Skip(excludeRecord).Take(pageSize).ToList();
         }    
+
+        public virtual IList<ProfilingGroup> GetProfilingGroupsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ProfilingGroups.Include(x => x.ProfilingOperatorGroups).Where(x => EF.Functions.Like(x.Name, string.Concat("%", find, "%"))).Skip(excludeRecord).Take(pageSize).ToList();
+        }
 
         public virtual ProfilingGroup GetProfilingGroupById(int Id){
             return _ctx.ProfilingGroups.Include(x => x.ProfilingGroupSystemMenus).FirstOrDefault(x=> x.Id == Id);

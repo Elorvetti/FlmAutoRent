@@ -37,9 +37,53 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         public IActionResult Index(){
             return RedirectToAction("Groups");
         }
-        public IActionResult Groups(){
+        
+        public IActionResult Groups(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Gruppi";
             var model = new GroupsTableViewModel();
+
+            model.HowManyField = pageSize;
+            model.HowManyFieldList = new List<GroupsTableViewModel.HowManyFields>{
+                new GroupsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new GroupsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new GroupsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new GroupsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _profilingGroupServices.GetProfilingGroups().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var ProfilingGroups = _profilingGroupServices.GetProfilingGroups(excludeRecords, pageSize);
+            model.GroupsListViewModel = new List<GroupsViewModel>();
+            
+            foreach(var ProfilingGroup in ProfilingGroups){
+                model.GroupsListViewModel.Add(new GroupsViewModel{ 
+                    Id = ProfilingGroup.Id, 
+                    Name = ProfilingGroup.Name,
+                    Date = ProfilingGroup.Data, 
+                    OperatorsInThisGroup = ProfilingGroup.ProfilingOperatorGroups.Where(x => x.Groups.Id == ProfilingGroup.Id).Count() 
+                });        
+            }
+            
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Groups(GroupsTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Gruppi";
 
             model.HowManyFieldList = new List<GroupsTableViewModel.HowManyFields>{
                 new GroupsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
@@ -48,7 +92,22 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new GroupsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var ProfilingGroups = _profilingGroupServices.GetProfilingGroups();
+            //Pagination
+            model.totalRecords = _profilingGroupServices.GetProfilingGroupsByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+            
+            var ProfilingGroups = _profilingGroupServices.GetProfilingGroupsByName(model.Find, excludeRecords, model.pageSize);
             model.GroupsListViewModel = new List<GroupsViewModel>();
             
             foreach(var ProfilingGroup in ProfilingGroups){
@@ -183,10 +242,11 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Groups");
         }
 
-        public IActionResult Emails(){
+        public IActionResult Emails(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Account Email";
             var model = new EmailsTableViewModel();
 
+            model.HowManyField = pageSize;
             model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
                 new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
                 new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
@@ -194,7 +254,66 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var Emails = _emailServices.GetEmails();
+            //Pagination
+            model.totalRecords = _emailServices.GetEmails().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var Emails = _emailServices.GetEmails(excludeRecords, pageSize);
+            model.EmailsListViewModel = new List<EmailsViewModel>();
+            
+            foreach(var Email in Emails){
+                model.EmailsListViewModel.Add(new EmailsViewModel{ 
+                    Id = Email.Id, 
+                    Name = Email.Name,
+                    Address = Email.Email, 
+                    Pop = Email.EmailPop,
+                    Smtp = Email.EmailSmtp,
+                    NUsing = Email.ProfilingOperatorEmails.Where(x => x.SystemEmails.Id == Email.Id).Count()
+                });        
+            }
+            
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Emails(EmailsTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Account Email";
+            
+            model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
+                new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new EmailsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _emailServices.GetEmailsByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+
+            var Emails = _emailServices.GetEmailsByName(model.Find, excludeRecords, model.pageSize);
             model.EmailsListViewModel = new List<EmailsViewModel>();
             
             foreach(var Email in Emails){
@@ -296,10 +415,11 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Emails");
         }
         
-        public IActionResult Operators(){
-             ViewData["Title"] = "Operatori";
+        public IActionResult Operators(int pageSize = 10, int pageNumber = 1){
+            ViewData["Title"] = "Operatori";
             var model = new OperatorsTableViewModel();
 
+            model.HowManyField = pageSize;
             model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
                 new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
                 new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
@@ -307,7 +427,22 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var Operators = _operatorServices.GetOperators();
+            //Pagination
+            model.totalRecords = _operatorServices.GetOperators().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var Operators = _operatorServices.GetOperators(excludeRecords, pageSize);
             model.OperatatorListViewModel = new List<OperatorsViewModel>();
             
             foreach(var Operator in Operators){
@@ -319,7 +454,52 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     EmailAddress = Operator.Email,
                     Group = Operator.ProfilingOperatorGroups.Any() ? _profilingGroupServices.GetProfilingGroupById(Operator.ProfilingOperatorGroups.FirstOrDefault().Groups.Id).Name : "",
                     PhoneNr = Operator.PhoneNr,
-                    Enabled = Operator.Enabled
+                    Enabled = Operator.Enabled == 1 ? "SI" : "NO"
+                });        
+            }
+    
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Operators(OperatorsTableViewModel model, int pageNumber = 1){
+             ViewData["Title"] = "Operatori";
+
+            model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
+                new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new EmailsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _operatorServices.GetOperatorsByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+
+            var Operators = _operatorServices.GetOperatorsByName(model.Find, excludeRecords, model.pageSize);
+            model.OperatatorListViewModel = new List<OperatorsViewModel>();
+            
+            foreach(var Operator in Operators){
+                model.OperatatorListViewModel.Add(new OperatorsViewModel{ 
+                    Id = Operator.Id,
+                    UserId = Operator.UserId,
+                    Name = Operator.Name,
+                    LastName = Operator.Lastname,
+                    EmailAddress = Operator.Email,
+                    Group = Operator.ProfilingOperatorGroups.Any() ? _profilingGroupServices.GetProfilingGroupById(Operator.ProfilingOperatorGroups.FirstOrDefault().Groups.Id).Name : "",
+                    PhoneNr = Operator.PhoneNr,
+                    Enabled = Operator.Enabled == 1 ? "SI" : "NO"
                 });        
             }
     
@@ -489,6 +669,13 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
     
         public IActionResult OperatorDelete(int Id){
+            //DELETE OPERATOR - EMAIL 
+            _operatorServices.DeleteProfilingOperatorEmail(Id);
+
+            //DELETE OPERATOR - GROUPS 
+            _operatorServices.DeleteProfilingOperatorGroup(Id);
+
+            //DELETE OPERATOR
             _operatorServices.DeleteSystemOperator(Id);
             
             return RedirectToAction("Operators");

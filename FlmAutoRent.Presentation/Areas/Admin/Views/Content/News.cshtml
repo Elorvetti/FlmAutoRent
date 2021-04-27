@@ -6,7 +6,7 @@
     <h1>Notizie</h1>
 
     <section class="border-grey box-shadow">
-        <form id="table-groups" method="post" action="/Content/News">
+        <form id="table-groups" method="POST" asp-area="Admin" asp-controller="Content" asp-action="News" >
             <div class="padding-small display-flex border-bottom-grey background-color-white">
                 <section class="table-header display-flex flex-direction-column flex-direction-row-d justify-content-flex-start flex-grow-2 max-width-100">
                     <select id="how-many-fields" asp-for="HowManyField" asp-items="@(new SelectList(Model.HowManyFieldList, "Value", "DisplayText"))"></select>
@@ -43,6 +43,28 @@
                         
                     </tbody>
                 </table>
+            </div>
+
+            <div class="display-flex flex-direction-row justify-content-space-between align-items-center background-color-grey padding-top-small padding-bottom-small">
+                <div class="display-flex flex-direction-column margin-left-small">
+                    <p class="font-size-16">Visualizzo @Model.displayRecord risultati su @Model.totalRecords</p>
+                </div>
+                @if(Model.displayPagination){
+                    <ul class="pagination display-flex flex-direction-row justify-content-flex-end text-right">
+                        @for(int i = 1; i <= Model.pageTotal; i++)
+                        {
+                            @if(i == Model.pageNumber){
+                                <li>
+                                    <a asp-area="Admin" asp-controller="Content" asp-action="News" asp-route-pageSize="@Model.HowManyField" asp-route-pageNumber="@i" class="margin-right-xsmall background-color-blue color-white btn-circle box-shadow display-flex flex-direction-column text-center">@i</a>
+                                </li>
+                            } else {
+                                <li>
+                                    <a asp-area="Admin" asp-controller="Content" asp-action="News" asp-route-pageSize="@Model.HowManyField" asp-route-pageNumber="@i" class="margin-right-xsmall background-color-blue-light color-white btn-circle box-shadow display-flex flex-direction-column text-center">@i</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                }
             </div>
 
         </form>

@@ -105,7 +105,7 @@ var CommonController = (function(){
 
     //MODAL WITH CUSTOM MESSAGE AND CUSTOM LINK
     var createModal = function(){
-        var element = '<div class="modal overlay display-flex flex-direction-column align-items-center justify-content-center">'
+        var element = '<div class="modal active overlay display-flex flex-direction-column align-items-center justify-content-center">'
         element = element + '<section id="modal-content" class="box-shadow background-color-white display-flex flex-direction-column justify-content-space-around">'
         element = element + '</section>'
         element = element + '</div>'
@@ -126,6 +126,19 @@ var CommonController = (function(){
         element = element + '</section>'
         
         $('#modal-content').append(element)
+    }
+
+    var findFormSubmit = function(){
+        var self = $(this);
+        setTimeout(function() {
+            if(self.val().length > 3 ){
+                self.closest('form').submit();
+            }     
+        }, 500)
+    }
+
+    var changePageSize = function(){
+        $(this).closest('form').submit();
     }
 
     return {
@@ -149,6 +162,9 @@ var CommonController = (function(){
         createModal: createModal,
         appendToModal: appendToModal,
         removeModal: removeModal,
+        
+        findFormSubmit: findFormSubmit,
+        changePageSize: changePageSize
     }
 })();
 
@@ -185,6 +201,12 @@ var CommonUI = (function(){
         //3. VEHICLES
         btnDeleteBrand: 'input[type="button"].delete.brand-delete',
         btnDeleteVehicleImage: 'input[type="button"].delete.vehicle-image-delete',
+
+        //FIND
+        findFormSubmit: 'input[type="text"]#find',
+
+        //ChangeSizePage
+        howManyFieldDisplay: 'select#how-many-fields'
     }
 
     return {
@@ -234,7 +256,11 @@ var Common = (function(CommonCtrl, CommonUI){
         $(document).on('click', DOMElement.btnDeleteBrand, { textToDisplay: 'Sei sicuro di voler eliminare il Brand?', link: '/Admin/Vehicles/BrandDelete/' } ,CommonCtrl.appendToModal);
         $(document).on('click', DOMElement.btnDeleteVehicleImage, { textToDisplay: 'Sei sicuro di voler eliminare l\'Immagine del veicolo ?', link: '/Admin/Vehicles/VehicleImageDelete/' } ,CommonCtrl.appendToModal);
 
+        $(document).on('keyup', DOMElement.findFormSubmit, CommonCtrl.findFormSubmit);
+        $(document).on('keypress', DOMElement.findFormSubmit, CommonCtrl.findFormSubmit);
+        $(document).on('keydown', DOMElement.findFormSubmit, CommonCtrl.findFormSubmit);
 
+        $(document).on('change', DOMElement.howManyFieldDisplay, CommonCtrl.changePageSize);
     }
 
     return {

@@ -12,7 +12,8 @@ using FlmAutoRent.Data.Entities;
 namespace FlmAutoRent.Services
 {
     public interface ICarServices {
-        IList<Vehicle> GetVehicles();
+        IList<Vehicle> GetVehicles(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<Vehicle> GetVehiclesByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         Vehicle GetVehicleById(int Id);
         IList<VehiclePowerSupply> GetVehiclePowerSupply();
         VehiclePowerSupply GetVehiclePowerSupplyById(int Id);
@@ -43,8 +44,12 @@ namespace FlmAutoRent.Services
             this._ctx = ctx;
         }
 
-        public IList<Vehicle> GetVehicles(){
-            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).ToList();
+        public IList<Vehicle> GetVehicles(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Include(x => x.PeopleMessages).Skip(excludeRecord).Take(pageSize).ToList();
+        }
+
+        public IList<Vehicle> GetVehiclesByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Where(x => EF.Functions.Like(x.Model, string.Concat("%", find, "%")) || EF.Functions.Like(x.VehiclesMappings.FirstOrDefault().Brands.BrandName, string.Concat("%", find, "%"))  ).Skip(excludeRecord).Take(pageSize).ToList();   
         }
 
         public Vehicle GetVehicleById(int Id){

@@ -17,7 +17,8 @@ namespace FlmAutoRent.Services
 {
     public interface IEmailServices
     {
-        IList<SystemEmail> GetEmails();
+        IList<SystemEmail> GetEmails(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<SystemEmail> GetEmailsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         IList<SystemDefaultEmail> GetDefaultEmails();
         SystemDefaultEmail GetDataEmailProvider(int Id);
         void InsertSystemEmail(SystemEmail model);
@@ -36,9 +37,13 @@ namespace FlmAutoRent.Services
             this._ctx = ctx;
         }
 
-        public virtual IList<SystemEmail> GetEmails(){
-            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).ToList();
+        public virtual IList<SystemEmail> GetEmails(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).Skip(excludeRecord).Take(pageSize).ToList();
         }   
+
+        public virtual IList<SystemEmail> GetEmailsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).Where(x => EF.Functions.Like(x.Email, string.Concat("%", find, "%")) || EF.Functions.Like(x.Name, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).ToList();
+        }
 
         public virtual IList<SystemDefaultEmail> GetDefaultEmails(){
             return _ctx.SystemDefaultEmails.ToList();
@@ -99,17 +104,17 @@ namespace FlmAutoRent.Services
             
             //configure email data
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress("manu.lorv@gmail.com");
+            mailMessage.From = new MailAddress("info@flmautorent.com");
             mailMessage.To.Add(new MailAddress(EmailTo));
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
             mailMessage.Subject = EmailObject;
 
             //Configure Client
-            SmtpClient client = new SmtpClient("smtp.gmail.com");
+            SmtpClient client = new SmtpClient("ssl0.ovh.net");
             client.Port = 587;
-            client.Credentials = new NetworkCredential("manu.lorv@gmail.com", "diocaneporco");
-            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential("info@flmautorent.com", "Flm4ut0R3nt2021!");
+            client.EnableSsl = false;
             client.Send(mailMessage);
 
         }

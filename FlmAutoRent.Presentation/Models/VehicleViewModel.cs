@@ -48,15 +48,14 @@ namespace FlmAutoRent.Presentation.Models
         [Display(Name="Indirizzo Email")]    
         public string Email { get; set; }
         
+        [Required(ErrorMessage="Il campo è obbligatorio")]
         [Display(Name="Messaggio")]    
         public string Message { get; set; }
 
-        [Required(ErrorMessage="Il campo è obbligatorio")]
         [Display(Name="Data Inizio Noleggio")]    
-        public DateTime StartRent { get; set; }
+        public DateTime? StartRent { get; set; }
 
-        [Required(ErrorMessage="Il campo è obbligatorio")]
         [Display(Name="Data Fine Noleggio")] 
-        public DateTime EndRent { get; set; }
+        public DateTime? EndRent { get; set; }
     }
 }

@@ -15,7 +15,8 @@ namespace FlmAutoRent.Services
     {
         IList<SeoIndex> GetListSeoIndex();
         SeoIndex GetContentNewsSeoIndexById(int Id);
-        IList<ContentNews> GetContentNews();
+        IList<ContentNews> GetContentNews(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<ContentNews> GetContentNewsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         ContentNews GetContentNewsById(int id);
         void InsertContentNews(ContentNews model);
         void UpdateContentNews(int Id, ContentNews model);
@@ -45,8 +46,12 @@ namespace FlmAutoRent.Services
             return _ctx.SeoIndex.FirstOrDefault(x => x.Id == Id);
         }
 
-        public IList<ContentNews> GetContentNews(){
-            return _ctx.ContentNews.Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).ToList();
+        public IList<ContentNews> GetContentNews(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentNews.Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Skip(excludeRecord).Take(pageSize).ToList();
+        }
+
+        public IList<ContentNews> GetContentNewsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentNews.Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Where(x => EF.Functions.Like(x.Title, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).ToList();
         }
 
         public ContentNews GetContentNewsById(int id){

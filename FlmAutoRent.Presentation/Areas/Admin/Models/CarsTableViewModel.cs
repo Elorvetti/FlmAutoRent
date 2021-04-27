@@ -19,6 +19,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
         public string PathLogo { get; set; }
         public string Category { get; set; }
         public string Model { get; set; }
+        public string Display { get; set; }
         public int TotalRequest{ get; set; }
     }
 }

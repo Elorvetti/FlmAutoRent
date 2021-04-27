@@ -44,9 +44,51 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Brands");
         }
 
-        public IActionResult Brands(){
+        public IActionResult Brands(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Brand";
             var model = new BrandsTableViewModel();
+            
+            model.HowManyField = pageSize;
+            model.HowManyFieldList = new List<BrandsTableViewModel.HowManyFields>{
+                new BrandsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new BrandsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new BrandsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new BrandsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _vehiclesBrandService.GetVehiclesBrands().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var brands = _vehiclesBrandService.GetVehiclesBrands(excludeRecords, pageSize);
+            model.BrandsListViewModel = new List<BrandsViewModel>();
+            
+            foreach(var brand in brands){
+                model.BrandsListViewModel.Add(new BrandsViewModel{ 
+                    Id = brand.Id, 
+                    Name = brand.BrandName,
+                    PathLogo = string.Concat("/", brand.BrandImagePath.Replace("\\", "/")),
+                    Nusing = brand.VehiclesMappings.Where(x => x.Brands.Id == brand.Id).Count() //brand.VehiclesMappings.Where(x => x.Brands.Id == brand.Id).Count()
+                });        
+            }
+         
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Brands(BrandsTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Brand";
 
             model.HowManyFieldList = new List<BrandsTableViewModel.HowManyFields>{
                 new BrandsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
@@ -55,9 +97,23 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new BrandsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var brands = _vehiclesBrandService.GetVehiclesBrands();
-            model.BrandsListViewModel = new List<BrandsViewModel>();
+            //Pagination
+            model.totalRecords = _vehiclesBrandService.GetVehiclesBrandsByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
             
+            var brands = _vehiclesBrandService.GetVehiclesBrandsByName(model.Find, excludeRecords, model.pageSize);
+            model.BrandsListViewModel = new List<BrandsViewModel>();            
             foreach(var brand in brands){
                 model.BrandsListViewModel.Add(new BrandsViewModel{ 
                     Id = brand.Id, 
@@ -192,10 +248,11 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return RedirectToAction("Brands");
         }
 
-        public IActionResult Cars(){
+        public IActionResult Cars(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Veicoli";
             var model = new CarsTableViewModel();
 
+            model.HowManyField = pageSize;
             model.HowManyFieldList = new List<CarsTableViewModel.HowManyFields>{
                 new CarsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
                 new CarsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
@@ -203,7 +260,22 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 new CarsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
             };
 
-            var cars = _carService.GetVehicles();
+              //Pagination
+            model.totalRecords = _carService.GetVehicles().Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = pageSize;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / pageSize);
+            var excludeRecords = (pageSize * pageNumber) - pageSize;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > pageSize){
+                model.displayPagination = true;
+            }
+
+            var cars = _carService.GetVehicles(excludeRecords, pageSize);
             model.CarsListViewModel = new List<CarsViewModel>();
             
             foreach(var car in cars){
@@ -212,7 +284,51 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     PathLogo = string.Concat("/", car.VehiclesMappings.FirstOrDefault(x => x.Vehicles.Id == car.Id).Brands.BrandImagePath.Replace("\\", "/")),
                     Category = car.ContentCategoryNews.FirstOrDefault(x => x.Vehicle.Id == car.Id).ContentCategories.Name,
                     Model = car.Model,
-                    TotalRequest = 0 //brand.VehiclesMappings.Where(x => x.Brands.Id == brand.Id).Count()
+                    Display = car.Bookable ? "SI" : "NO",
+                    TotalRequest = car.PeopleMessages.Where(x => x.Vehicle.Id == car.Id).Count()
+                });        
+            }
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Cars(CarsTableViewModel model, int pageNumber = 1){
+            ViewData["Title"] = "Veicoli";
+
+            model.HowManyFieldList = new List<CarsTableViewModel.HowManyFields>{
+                new CarsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
+                new CarsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
+                new CarsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
+                new CarsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
+            };
+
+            //Pagination
+            model.totalRecords = _carService.GetVehiclesByName(model.Find).Count;
+            model.pageNumber = pageNumber;
+            model.pageSize = model.HowManyField;
+            model.pageTotal =  Math.Ceiling((double)model.totalRecords / model.HowManyField);
+            var excludeRecords = (model.HowManyField * pageNumber) - model.HowManyField;  
+            model.displayRecord = model.pageSize * pageNumber;
+            if(model.displayRecord > model.pageTotal){
+                model.displayRecord = model.totalRecords;
+            }
+
+            if(model.totalRecords > model.HowManyField){
+                model.displayPagination = true;
+            }
+
+            var cars = _carService.GetVehiclesByName(model.Find, excludeRecords, model.pageSize);
+            model.CarsListViewModel = new List<CarsViewModel>();
+            
+            foreach(var car in cars){
+                model.CarsListViewModel.Add(new CarsViewModel{ 
+                    Id = car.Id, 
+                    PathLogo = string.Concat("/", car.VehiclesMappings.FirstOrDefault(x => x.Vehicles.Id == car.Id).Brands.BrandImagePath.Replace("\\", "/")),
+                    Category = car.ContentCategoryNews.FirstOrDefault(x => x.Vehicle.Id == car.Id).ContentCategories.Name,
+                    Model = car.Model,
+                    Display = car.Bookable ? "SI" : "NO",
+                    TotalRequest = car.PeopleMessages.Where(x => x.Vehicle.Id == car.Id).Count()
                 });        
             }
             
@@ -451,7 +567,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return View(model);
         }
 
-
         public IActionResult VehicleImageDelete(int id){
             //DELETE PHISYCAL IMAGE
             var image = _carService.GetVehiclesImagesById(id);
@@ -512,7 +627,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             return View("500");
         }
         
-
         public IActionResult CarsFourStep(int id){
             ViewData["Title"] = "Aggiungi Veicolo";
             var model = new CarAddViewModel();
@@ -530,8 +644,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             }
             return View(model);
         }
-
-
 
     }
 }

@@ -207,7 +207,8 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
 .align-items-end{ align-items: flex-end; }
 .align-items-center{ align-items: center; }
 .justify-content-space-around{ justify-content: space-around; }
-.justify-content-space-evenly{ justify-content: space-evenly; }
+.justify-content-space-between{ justify-content: space-between; } 
+.justify-content-space-evenly{ justify-content: space-evenly; } 
 .justify-content-flex-start{ justify-content: flex-start; }
 .justify-content-flex-end{ justify-content: flex-end; }
 .justify-content-center{ justify-content: center; }
@@ -256,6 +257,10 @@ input[type="file"]{ position: absolute; top: 0; left: 0; right: 0; bottom: 0; op
 table{ table-layout: auto; width: 100%; border-collapse: collapse; }
 table > thead > tr > th, table > tbody > tr > td{ line-height: 35px; padding-left: 10px; border: 2px solid #e0e0e0; }
 
+/* PAGINATION */
+ul.pagination li{ line-height: 35px!important;}
+ul.pagination li a{ width: 35px; max-width: 35px; max-height: 35px; font-size: 14px; line-height: 35px; }
+
 /* HEADER MENU */
 header{ position: fixed; left: 0; right: 0; flex-direction: column; z-index: 9999;}
 header.fixed{ position: fixed; }
@@ -271,9 +276,10 @@ div#sidebar li.accordion > ul { max-height: 0; transition: max-height 0.3s ease-
 div#sidebar li.accordion > ul.open { max-height: 300px; transition: max-height 0.3s ease-out;  height:auto;  }
 
 /* MODAL */
-div.modal{ display: none; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; }
+div.modal{ position: absolute; display: none; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; }
 div.modal.active{ position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #fff; overflow-y: scroll; z-index: 99999; }
 div.modal.overlay{ background-color: rgba(0, 0, 0, .8); }
+div.modal.active.overlay{ display: flex; }
 div.modal > section#modal-content{ min-width: 600px; min-height: 300px; }
 
 div.modal > section#modal-content .btn{ min-width: 120px; min-height: 35px; font-size: 16px; }

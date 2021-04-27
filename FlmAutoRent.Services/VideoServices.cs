@@ -13,7 +13,8 @@ namespace FlmAutoRent.Services
 {
     public interface IVideoService
     {
-        IList<ContentVideo> GetContentVideos();
+        IList<ContentVideo> GetContentVideos(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<ContentVideo> GetContentVideosByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         ContentVideo GetContentVideoById(int id);
         void InsertContentVideo(ContentVideo model);
         void UpdateContentVideo(ContentVideo model);
@@ -27,8 +28,12 @@ namespace FlmAutoRent.Services
             this._ctx = ctx;
         }
         
-        public IList<ContentVideo> GetContentVideos(){
-            return _ctx.ContentVideos.ToList();
+        public IList<ContentVideo> GetContentVideos(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentVideos.Skip(excludeRecord).Take(pageSize).ToList();
+        }
+        
+        public IList<ContentVideo> GetContentVideosByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.ContentVideos.Where( x => EF.Functions.Like(x.Title, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).ToList();
         }
 
         public ContentVideo GetContentVideoById(int id){

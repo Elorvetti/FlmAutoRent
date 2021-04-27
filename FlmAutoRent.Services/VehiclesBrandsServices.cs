@@ -14,7 +14,8 @@ namespace FlmAutoRent.Services
     public interface IVehiclesBrandsServices {
         IList<SeoIndex> GetListSeoIndex();
         SeoIndex GetContentNewsSeoIndexById(int Id);
-        IList<VehiclesBrand> GetVehiclesBrands();
+        IList<VehiclesBrand> GetVehiclesBrands(int excludeRecord = 0, int pageSize = int.MaxValue);
+        IList<VehiclesBrand> GetVehiclesBrandsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         VehiclesBrand GetVehiclesBrandById(int id);
         void InsertBrand(VehiclesBrand model);
         void UpdateBrand(VehiclesBrand model);
@@ -29,8 +30,12 @@ namespace FlmAutoRent.Services
             this._ctx = ctx;
         }
         
-        public IList<VehiclesBrand> GetVehiclesBrands(){
-            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).ToList();
+        public IList<VehiclesBrand> GetVehiclesBrands(int excludeRecord = 0, int pageSize = int.MaxValue){
+            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).Skip(excludeRecord).Take(pageSize).ToList();
+        }
+
+        public IList<VehiclesBrand> GetVehiclesBrandsByName(string find, int excludeRecord = int.MaxValue, int pageSize = int.MaxValue){
+            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).Where(x => EF.Functions.Like(x.BrandName, string.Concat("%", find, "%"))).Skip(excludeRecord).Take(pageSize).ToList();
         }
 
         public VehiclesBrand GetVehiclesBrandById(int id){

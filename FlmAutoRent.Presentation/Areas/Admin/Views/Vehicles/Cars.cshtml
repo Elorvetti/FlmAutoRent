@@ -6,7 +6,7 @@
     <h1>Veicoli</h1>
 
     <section class="border-grey box-shadow">
-        <form id="table-groups" method="post" action="/Vehicles/Cars">
+        <form id="table-groups" method="POST" asp-area="Admin" asp-controller="Vehicles" asp-action="Cars" >
             <div class="padding-small display-flex border-bottom-grey background-color-white">
                 <section class="table-header display-flex flex-direction-column flex-direction-row-d justify-content-flex-start flex-grow-2 max-width-100">
                     <select id="how-many-fields" asp-for="HowManyField" asp-items="@(new SelectList(Model.HowManyFieldList, "Value", "DisplayText"))"></select>
@@ -24,8 +24,9 @@
                             <th class="text-center">Logo</th>
                             <th>Categoria</th>
                             <th>Modello</th>
-                            <th class="text-center">Richieste Totali</th>
-                            <th class="text-center">Azioni</th>
+                            <th class="text-center padding-remove">Visibile</th>
+                            <th class="text-center padding-remove">Richieste</th>
+                            <th class="text-center padding-remove">Azioni</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,7 +36,8 @@
                                 <td class="text-center"><img width="auto" height="auto" src="@car.PathLogo" /></td>
                                 <td class="vertical-align-middle">@car.Category</td>
                                 <td class="vertical-align-middle">@car.Model</td>
-                                <td class="text-center vertical-align-middle">@car.TotalRequest</td>
+                                <td class="text-center padding-remove vertical-align-middle">@car.Display</td>
+                                <td class="text-center padding-remove vertical-align-middle">@car.TotalRequest</td>
                                 <td class="text-center vertical-align-middle">
                                     <a class="btn background-color-blue color-white font-size-14 padding-left-small padding-right-small vertical-align-middle box-shadow" asp-area="Admin" asp-controller="Vehicles" asp-action="CarsFirstStep" asp-route-id="@car.Id">Modifica</a>
                                 </td>
@@ -43,6 +45,28 @@
                         }
                     </tbody>
                 </table>
+            </div>
+
+            <div class="display-flex flex-direction-row justify-content-space-between align-items-center background-color-grey padding-top-small padding-bottom-small">
+                <div class="display-flex flex-direction-column margin-left-small">
+                    <p class="font-size-16">Visualizzo @Model.displayRecord risultati su @Model.totalRecords</p>
+                </div>
+                @if(Model.displayPagination){
+                    <ul class="pagination display-flex flex-direction-row justify-content-flex-end text-right">
+                        @for(int i = 1; i <= Model.pageTotal; i++)
+                        {
+                            @if(i == Model.pageNumber){
+                                <li>
+                                    <a asp-area="Admin" asp-controller="Vehicles" asp-action="Cars" asp-route-pageSize="@Model.HowManyField" asp-route-pageNumber="@i" class="margin-right-xsmall background-color-blue color-white btn-circle box-shadow display-flex flex-direction-column text-center">@i</a>
+                                </li>
+                            } else {
+                                <li>
+                                    <a asp-area="Admin" asp-controller="Vehicles" asp-action="Cars" asp-route-pageSize="@Model.HowManyField" asp-route-pageNumber="@i" class="margin-right-xsmall background-color-blue-light color-white btn-circle box-shadow display-flex flex-direction-column text-center">@i</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                }
             </div>
 
         </form>

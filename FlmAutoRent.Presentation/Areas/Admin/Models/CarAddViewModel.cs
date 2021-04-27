@@ -38,7 +38,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
         [Display(Name="Modello")]
         public string Model { get; set; }
 
-        [MaxLength(255, ErrorMessage="IL campo non deve superare i 255 caratteri")]
         [Display(Name="Descrizione")]
         public string Description { get; set; }
 
