@@ -45,11 +45,11 @@ namespace FlmAutoRent.Services
         }
 
         public IList<Vehicle> GetVehicles(int excludeRecord = 0, int pageSize = int.MaxValue){
-            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Include(x => x.PeopleMessages).Skip(excludeRecord).Take(pageSize).ToList();
+            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Include(x => x.PeopleMessages).OrderBy(x => x.VehiclesMappings.FirstOrDefault().Brands.BrandName).Skip(excludeRecord).Take(pageSize).ToList();
         }
 
         public IList<Vehicle> GetVehiclesByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
-            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Where(x => EF.Functions.Like(x.Model, string.Concat("%", find, "%")) || EF.Functions.Like(x.VehiclesMappings.FirstOrDefault().Brands.BrandName, string.Concat("%", find, "%"))  ).Skip(excludeRecord).Take(pageSize).ToList();   
+            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Where(x => EF.Functions.Like(x.Model, string.Concat("%", find, "%")) || EF.Functions.Like(x.VehiclesMappings.FirstOrDefault().Brands.BrandName, string.Concat("%", find, "%"))  ).OrderBy(x => x.VehiclesMappings.FirstOrDefault().Brands.BrandName).Skip(excludeRecord).Take(pageSize).ToList();   
         }
 
         public Vehicle GetVehicleById(int Id){
@@ -98,6 +98,8 @@ namespace FlmAutoRent.Services
             entityCar.Cv = model.Cv;
             entityCar.Kw = model.Kw;
             entityCar.Bookable = model.Bookable;
+            entityCar.DisplayHp = model.DisplayHp;
+            entityCar.Priority = model.Priority;
 
             _ctx.SaveChanges();
         }

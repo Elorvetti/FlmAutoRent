@@ -123,9 +123,8 @@
 
                         <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall">
                             <section class="display-flex flex-direction-row padding-left-xsmall padding-right-xsmall align-items-center background-color-white border-grey-medium margin-top-small">
-                                <input type="checkbox" asp-for="@Model.carFirstStep.Bookable" class="checkbox-menu margin-right-xsmall" />
-                                <label for="@Model.carFirstStep.Bookable" class="padding-left-xsmall color-blue line-height-35">Prenotabile</label>
-                                <input type="hidden" asp-for="@Model.carFirstStep.Bookable" />
+                                <input asp-for="@Model.carFirstStep.Bookable" type="checkbox" class="checkbox-menu margin-right-xsmall"/>
+                                <label asp-for="@Model.carFirstStep.Bookable" class="padding-left-xsmall color-blue line-height-35" >Prenotabile</label>
                             </section>
                         </section>
 
@@ -140,9 +139,8 @@
 
                         <section class="padding-left-xsmall display-flex flex-direction-column width-1-1 margin-top-xsmall">
                             <section class="display-flex flex-direction-row padding-left-xsmall padding-right-xsmall align-items-center background-color-white border-grey-medium margin-top-small">
-                                <input type="checkbox" asp-for="@Model.carFirstStep.DisplayHp" class="checkbox-menu margin-right-xsmall" />
-                                <label for="@Model.carFirstStep.DisplayHp" class="padding-left-xsmall color-blue line-height-35">Visualizza in Home Page</label>
-                                <input type="hidden" asp-for="@Model.carFirstStep.DisplayHp" />
+                                <input asp-for="@Model.carFirstStep.DisplayHp" type="checkbox" class="checkbox-menu margin-right-xsmall"/>
+                                <label asp-for="@Model.carFirstStep.DisplayHp" class="padding-left-xsmall color-blue line-height-35" >Visualizza in Home Page</label>
                             </section>
                         </section>
 

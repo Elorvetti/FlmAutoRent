@@ -399,13 +399,23 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
                 var brandName = _vehiclesBrandService.GetVehiclesBrandById(model.carFirstStep.BrandId).BrandName;
 
+                var description = "";
+                if(model.carFirstStep.Description != string.Empty ){
+                    if(model.carFirstStep.Description.Length > 255){
+                        description = model.carFirstStep.Description.Substring(0, 250);
+                    } else {
+                        description = model.carFirstStep.Description;
+                    }
+                } 
+
+
                 entityCar.Model = model.carFirstStep.Model;
                 entityCar.Description = model.carFirstStep.Description;
                 entityCar.Cv = model.carFirstStep.CV;
                 entityCar.Kw = model.carFirstStep.KW;
                 entityCar.Bookable = model.carFirstStep.Bookable;
                 entityCar.MetaTitle = string.Concat(brandName, " - ", model.carFirstStep.Model);
-                entityCar.MetaDescription = model.carFirstStep.Description;
+                entityCar.MetaDescription = description;
                 entityCar.PermaLink = _commonService.cleanStringPath(model.carFirstStep.Model);
                 entityCar.OperatorData = DateTime.Now;
                 entityCar.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;

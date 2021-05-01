@@ -113,7 +113,7 @@ namespace FlmAutoRent.Services
             //Configure Client
             SmtpClient client = new SmtpClient("ssl0.ovh.net");
             client.Port = 587;
-            client.Credentials = new NetworkCredential("info@flmautorent.com", "Flm4ut0R3nt2021!");
+            client.Credentials = new NetworkCredential("info@flmautorent.com", "OhyR3e9rPuMavXAyd3yX");
             client.EnableSsl = false;
             client.Send(mailMessage);
 

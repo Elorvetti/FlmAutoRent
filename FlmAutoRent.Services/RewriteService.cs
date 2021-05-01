@@ -45,11 +45,11 @@ namespace FlmAutoRent.Services
         }
 
         public Vehicle GetVehicle(string permaLink){
-            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.VehiclesImages).ThenInclude(x => x.Image).FirstOrDefault(x => x.PermaLink == permaLink);
+            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.VehiclesImages).ThenInclude(x => x.Image).OrderBy(x => x.Priority).FirstOrDefault(x => x.PermaLink == permaLink);
         }
 
         public IList<ContentCategoryNews> GetContentCategoriesVehicles(string permalink){
-            return _ctx.ContentCategoryNews.Include(x => x.Vehicle).ThenInclude(x => x.VehiclesImages).ThenInclude(x => x.Image).Include(x => x.Vehicle).ThenInclude(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategories).Where(x => x.ContentCategories.PermaLink == permalink && x.Vehicle.Bookable).ToList();
+            return _ctx.ContentCategoryNews.Include(x => x.Vehicle).ThenInclude(x => x.VehiclesImages).ThenInclude(x => x.Image).Include(x => x.Vehicle).ThenInclude(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.ContentCategories).Where(x => x.ContentCategories.PermaLink == permalink && x.Vehicle.Bookable).OrderBy(x => x.Vehicle.Priority).ToList();
         }
     }
 }

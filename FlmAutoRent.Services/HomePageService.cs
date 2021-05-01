@@ -34,7 +34,7 @@ namespace FlmAutoRent.Services
         }
 
         public List<Vehicle> GetVehicles(){
-            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.VehiclesImages).ThenInclude(x => x.Image).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Where(x => x.DisplayHp && x.Bookable).ToList(); 
+            return _ctx.Vehicles.Include(x => x.VehiclesMappings).ThenInclude(x => x.Brands).Include(x => x.VehiclesImages).ThenInclude(x => x.Image).Include(x => x.ContentCategoryNews).ThenInclude(x => x.ContentCategories).Where(x => x.DisplayHp && x.Bookable).OrderBy(x => x.Priority).ToList(); 
         }
 
         public Homepage GetHomepage(){
