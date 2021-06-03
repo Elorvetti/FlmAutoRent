@@ -11,27 +11,27 @@
     <section>
         <form method="POST" asp-controller="System" asp-action="GroupsAddOrEdit" >
             <input type="hidden" name="Id" value="@Model.Id" />
-            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+            <div class="card-box display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
                 <section class="padding-xsmall border-bottom-grey background-color-white">
                     <h3 class="padding-left-xsmall">Gruppi Sistema</h3>
                 </section>
                 <section class="padding-xsmall display-flex flex-direction-column">
                     <section class="padding-left-xsmall display-flex flex-direction-column">
-                        @Html.LabelFor(m => m.Name)
                         @Html.TextBoxFor(m => m.Name, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
-                        <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red font-weight-600"></span>
+                        @Html.LabelFor(m => m.Name)
+                        <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red"></span>
                     </section>
                 </section>
             </div>
 
-            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+            <div class="card-box display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
                 <section class="padding-xsmall border-bottom-grey background-color-white">
                     <h3 class="padding-left-xsmall">Menu Assocciati Al Gruppo</h3>
                 </section>
-                <section class="padding-xsmall display-flex flex-direction-row">
+                <section class="padding-xsmall display-flex flex-direction-row flex-wap margin-bottom-small">
                     @for( var i = 0; i < Model.SystemMenuList.Count(); i++){
                             @if(Model.SystemMenuList[i].MenuFatherId == null){
-                                <section class="menu-father padding-left-xsmall display-flex flex-direction-column border-grey padding-small background-color-white margin-right-xsmall">
+                                <section class="menu-father padding-left-xsmall display-flex flex-direction-column border-grey padding-small background-color-white margin-right-xsmall margin-bottom-xsmall min-width-240-m">
                                     <section class="display-flex flex-direction-row align-items-center margin-bottom-xsmall" >
                                         <input type="checkbox" asp-for="@Model.SystemMenuList[i].Active" id="@Model.SystemMenuList[i].Id" class="checkbox-menu" menu-father="@Model.SystemMenuList[i].MenuFatherId" />
                                         <label for="@Model.SystemMenuList[i].Id" class="padding-left-xsmall">@Model.SystemMenuList[i].Name</label>
@@ -54,7 +54,7 @@
                 </section>
             </div>
 
-            <div class="display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
+            <div class="card-box display-flex flex-direction-column justify-content-flex-start border-grey margin-bottom-small box-shadow">
                 <section class="padding-xsmall border-bottom-grey background-color-white">
                     <h3 class="padding-left-xsmall">Operatori</h3>
                 </section>
@@ -71,12 +71,10 @@
                 </section>
             </div>
 
-
             <div class="display-flex flex-direction-column align-items-center justify-content-space-around">
                 <input type="submit" class="btn background-color-blue color-white text-center box-shadow" value="Salva">
             </div>
 
-            
         </form>
     </section>
 </div>

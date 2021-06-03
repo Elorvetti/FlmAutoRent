@@ -1,11 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FlmAutoRent.Presentation.Areas.Admin.Models
 {
-    public class AccountPasswordViewModel
+    public class AccountPasswordViewModel : BaseModel
     {
         public Guid AccountGuid { get; set; }
 
@@ -15,6 +13,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
         [RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!-_?|£$%&,.;]).{8,}$", ErrorMessage="La Password deve contere almeno un carattere speciale, una lettera maiuscola, un numero")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public string PasswordCrypt => ConvertToEncrypt(Password);
 
         [Display(Name="Conferma password")]    
         [Required(ErrorMessage="Il campo è obbligatorio")]

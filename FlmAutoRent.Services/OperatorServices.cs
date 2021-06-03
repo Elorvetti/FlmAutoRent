@@ -63,7 +63,7 @@ namespace FlmAutoRent.Services
         }
 
         public bool LoginOperatorSuccess(string userId, string password){
-            if(_ctx.ProfilingOperators.Where(x => x.Enabled == 1 && (x.UserId == userId || x.Password == password)).Any()){
+            if(_ctx.ProfilingOperators.Where(x => x.Enabled == 1 && (x.UserId == userId && x.Password == password)).Any()){
                 return true;
             }
 

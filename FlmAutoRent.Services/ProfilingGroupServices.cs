@@ -25,6 +25,7 @@ namespace FlmAutoRent.Services
         IList<ProfilingGroup> GetProfilingGroupsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         ProfilingGroup GetProfilingGroupById(int id);
 
+        int GetProfilingGroupUsage(int Id);
         //CRUD
         void InsertProfilingGroups(ProfilingGroup model);
         void InsertProfilingGroupsSystemMenu(ProfilingGroupSystemMenu model);
@@ -96,11 +97,15 @@ namespace FlmAutoRent.Services
         }        
 
         public virtual IList<ProfilingGroup> GetProfilingGroups(int excludeRecord = 0, int pageSize = int.MaxValue){
-            return _ctx.ProfilingGroups.Include(x => x.ProfilingOperatorGroups).Skip(excludeRecord).Take(pageSize).ToList();
-        }    
+            return _ctx.ProfilingGroups.Include(x => x.ProfilingOperatorGroups).Skip(excludeRecord).Take(pageSize).Select(x => new ProfilingGroup { Id = x.Id, Name = x.Name, Data = x.Data }).ToList();
+        }
 
         public virtual IList<ProfilingGroup> GetProfilingGroupsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
             return _ctx.ProfilingGroups.Include(x => x.ProfilingOperatorGroups).Where(x => EF.Functions.Like(x.Name, string.Concat("%", find, "%"))).Skip(excludeRecord).Take(pageSize).ToList();
+        }
+
+        public int GetProfilingGroupUsage(int Id){
+            return _ctx.ProfilingOperatorGroups.Where(x => x.Groups.Id == Id).Count();
         }
 
         public virtual ProfilingGroup GetProfilingGroupById(int Id){

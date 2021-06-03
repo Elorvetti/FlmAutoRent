@@ -9,12 +9,19 @@
                 <span class="display-flex flex-direction-column justify-content-center color-white text-right margin-xsmall btn-menu font-size-32 material-icons">menu</span>
             </section>
         </section>
-        <ul class="display-flex flex-direction-row justify-content-space-around width-1-1 menu-list">
-            <li class="dispaly-flex color-white font-size-20 font-weight-500 menu-items"><a href="/"><img width="200" height="auto" src="/upload/logo.png" alt="logo"></a></li>   
-            @foreach (var category in Model.ContentCategories)
-            {
-                <li class="display-flex flex-direction-column justify-content-center color-white font-size-20 font-weight-500 menu-items"><a href="@string.Concat('/', category.PermaLink)" class="display-flex flex-direction-column justify-content-center color-white">@category.Name</a></li>   
-            }
+        <ul class="display-flex flex-direction-row justify-content-flex-start width-1-1 menu-list padding-left-large">
+            <li class="dispaly-flex menu-items"><a href="/"><img width="200" height="auto" src="/upload/logo.png" alt="logo"></a></li>   
+            
+            <li class="display-flex flex-direction-row justify-content-flex-end align-items-center width-1-1">
+                <ul class="display-flex flex-direction-row menu-list justify-content-flex-end padding-right-large">
+                    <li class="display-flex flex-direction-column justify-content-center menu-items"><a href="/" class="display-flex flex-direction-column justify-content-center color-white">Home</a></li>   
+                    @foreach (var category in Model.ContentCategories)
+                    {
+                        <li class="display-flex flex-direction-column justify-content-center menu-items"><a href="@string.Concat('/', category.PermaLink)" class="display-flex flex-direction-column justify-content-center color-white">@category.Name</a></li>   
+                    }            
+                </ul>
+            </li>
+
         </ul>
         <section class="display-flex flex-direction-column justify-content-center margin-left-small margin-right-small margin-top-large text-center z-index-9996 height-400">
             @Html.Raw(Model.WelcomeMessage)

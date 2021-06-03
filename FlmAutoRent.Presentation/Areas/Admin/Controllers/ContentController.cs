@@ -1,17 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using FlmAutoRent.Presentation.Areas.Admin.Models;
 using FlmAutoRent.Data.Entities;
 using FlmAutoRent.Services;
-using Microsoft.AspNetCore.DataProtection;
 
 namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
 {
@@ -19,8 +14,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
     [Authorize]
     public class ContentController : Controller
     {
-        private readonly IDataProtectionProvider _dataProtectionProvider;
-        private const string Key = "cxz92k13md8f981hu6y7alkc";
         private readonly ICommonService _commonService;
         private readonly IFileService _fileService;
         private readonly IOperatorServices _operatorServices;
@@ -31,8 +24,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         private readonly INewsServices _newsService;
         private readonly IHomePageService _homepageService;
 
-        public ContentController(IDataProtectionProvider dataProtectionProvider, IOperatorServices operatorServices, ICommonService commonService, ICategoryService categoryService, IFileService fileService, IImageService imagesService,IVideoService videosService, IAttachmentService attachmentService, INewsServices newsService, IHomePageService homepageService){            
-            this._dataProtectionProvider = dataProtectionProvider;
+        public ContentController(IOperatorServices operatorServices, ICommonService commonService, ICategoryService categoryService, IFileService fileService, IImageService imagesService,IVideoService videosService, IAttachmentService attachmentService, INewsServices newsService, IHomePageService homepageService){            
             this._commonService = commonService;
             this._operatorServices = operatorServices;
             this._categoryService = categoryService;
@@ -113,7 +105,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             
             if(ModelState.IsValid){
                 //GET OPERATOR ID
-                var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
                 var description = "";
 
                 if(model.Description != string.Empty ){
@@ -133,7 +124,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 entitiesCategory.MetaDescription = description;
                 entitiesCategory.PermaLink = _commonService.cleanStringPath(model.Name);
                 entitiesCategory.OperatorData = DateTime.Now;
-                entitiesCategory.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                entitiesCategory.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
 
                 //UPDATE OR CREATE CATEGORY
                 if(model.Id != 0){
@@ -184,12 +175,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new FilesTableViewModel();
 
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
-                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _imagesService.GetContentImages().Count;
@@ -223,13 +208,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Images(FilesTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Immagini";
-
-            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
-                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
              //Pagination
             model.totalRecords = _imagesService.GetContentImagesByName(model.Find).Count;
@@ -282,7 +260,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
            var entityImage = new ContentImage();
            
             if(ModelState.IsValid){
-                var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
                 
                 if(model.Id == 0){
                     var fileExtension = new[] { "image/gif", "image/jpg", "image/jpeg", "image/tiff", "image/png" };
@@ -301,7 +278,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                         entityImage.FileExtenstion = Path.GetExtension(model.Upload.FileName);
                         entityImage.FileNameOriginal = model.Upload.FileName;
                         entityImage.OperatorData = DateTime.Now;
-                        entityImage.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                        entityImage.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
 
                         _imagesService.InsertContentImage(entityImage);
 
@@ -313,7 +290,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     entityImage.Title = model.Title;
                     entityImage.Description = model.Description;   
                     entityImage.OperatorData = DateTime.Now;
-                    entityImage.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                    entityImage.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
                     _imagesService.UpdateContentImage(entityImage);
                 }
                 
@@ -339,13 +316,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         public IActionResult Videos(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Video";
             var model = new FilesTableViewModel();
-
-            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
-                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _videosService.GetContentVideos().Count;
@@ -378,13 +348,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Videos(FilesTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Video";
-
-            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
-                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _videosService.GetContentVideosByName(model.Find).Count;
@@ -437,8 +400,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
            var entityVideo = new ContentVideo();
            
             if(ModelState.IsValid){
-                var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-                
                 if(model.Id == 0){
                     var fileExtension = new[] {  "video/mp4", "video/ogg", "video/3gp", "video/wmv", "video/webm", "video/flv"  };
             
@@ -456,7 +417,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                         entityVideo.FileExtenstion = Path.GetExtension(model.Upload.FileName);
                         entityVideo.FileNameOriginal = model.Upload.FileName;
                         entityVideo.OperatorData = DateTime.Now;
-                        entityVideo.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                        entityVideo.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
 
                         _videosService.InsertContentVideo(entityVideo);
 
@@ -468,7 +429,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     entityVideo.Title = model.Title;
                     entityVideo.Description = model.Description;   
                     entityVideo.OperatorData = DateTime.Now;
-                    entityVideo.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                    entityVideo.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
                     _videosService.UpdateContentVideo(entityVideo);
                 }
                 
@@ -494,13 +455,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         public IActionResult Attachments(int pageSize = 10, int pageNumber = 1){
             ViewData["Title"] = "Allegati";
             var model = new FilesTableViewModel();
-
-            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
-                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _attachmentService.GetContentAttachments().Count;
@@ -533,13 +487,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Attachments(FilesTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Allegati";
-
-            model.HowManyFieldList = new List<FilesTableViewModel.HowManyFields>{
-                new FilesTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new FilesTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _attachmentService.GetContentAttachmentsByName(model.Find).Count;
@@ -592,8 +539,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
            var entityAttachment = new ContentAttachment();
            
             if(ModelState.IsValid){
-                var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-                
+            
                 if(model.Id == 0){
                     var fileExtension = new[] {  "application/pdf", "application/doc", "application/docx"};
             
@@ -611,7 +557,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                         entityAttachment.FileExtenstion = Path.GetExtension(model.Upload.FileName);
                         entityAttachment.FileNameOriginal = model.Upload.FileName;
                         entityAttachment.OperatorData = DateTime.Now;
-                        entityAttachment.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                        entityAttachment.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
 
                         _attachmentService.InsertContentAttachment(entityAttachment);
 
@@ -625,7 +571,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     entityAttachment.Title = model.Title;
                     entityAttachment.Description = model.Description;   
                     entityAttachment.OperatorData = DateTime.Now;
-                    entityAttachment.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                    entityAttachment.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
                     _attachmentService.UpdateContentAttachment(entityAttachment);
                 }
                 
@@ -653,12 +599,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new NewsTableViewModel();
 
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<NewsTableViewModel.HowManyFields>{
-                new NewsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new NewsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new NewsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new NewsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _newsService.GetContentNews().Count;
@@ -691,13 +631,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult News(NewsTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Notizie";
-
-            model.HowManyFieldList = new List<NewsTableViewModel.HowManyFields>{
-                new NewsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new NewsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new NewsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new NewsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _newsService.GetContentNewsByName(model.Find).Count;
@@ -841,8 +774,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var entityNews = new ContentNews();
             if(ModelState.IsValid){
                 
-                var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-                
                 //SALVO DATI NOTIZIA
                 entityNews.Display = model.DisplayNews;
                 entityNews.Guid = Guid.NewGuid();
@@ -851,7 +782,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 entityNews.Summary = model.Summary;
                 entityNews.News = model.News;
                 entityNews.DisplayOnFooter = model.DisplayOnFooter;
-                entityNews.IDOperator = _operatorServices.GetOperatorByUserId(UserId).Id;
+                entityNews.IDOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name).Id;
                 entityNews.OperatorData = DateTime.Now;
                 entityNews.SeoIndexRef = model.SeoIndexId;
 

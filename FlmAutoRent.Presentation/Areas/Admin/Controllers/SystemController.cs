@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,15 +17,12 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
     [Authorize]
     public class SystemController : Controller
     {
-        private readonly IDataProtectionProvider _dataProtectionProvider;
-        private const string Key = "cxz92k13md8f981hu6y7alkc";
         private readonly IProfilingGroupServices _profilingGroupServices;
         private readonly IEmailServices _emailServices;
         private readonly IOperatorServices _operatorServices;
         private readonly ILogServices _logService;
         
-        public SystemController(IDataProtectionProvider dataProtectionProvider, IProfilingGroupServices profilingGroupServices, IEmailServices emailServices, IOperatorServices operatorServices, ILogServices logServices){
-            this._dataProtectionProvider = dataProtectionProvider;
+        public SystemController(IProfilingGroupServices profilingGroupServices, IEmailServices emailServices, IOperatorServices operatorServices, ILogServices logServices){
             this._profilingGroupServices = profilingGroupServices;
             this._emailServices = emailServices;
             this._operatorServices = operatorServices;
@@ -43,12 +38,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new GroupsTableViewModel();
 
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<GroupsTableViewModel.HowManyFields>{
-                new GroupsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new GroupsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new GroupsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new GroupsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _profilingGroupServices.GetProfilingGroups().Count;
@@ -65,15 +54,15 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 model.displayPagination = true;
             }
 
-            var ProfilingGroups = _profilingGroupServices.GetProfilingGroups(excludeRecords, pageSize);
+            var profilingGroups = _profilingGroupServices.GetProfilingGroups(excludeRecords, pageSize);
             model.GroupsListViewModel = new List<GroupsViewModel>();
             
-            foreach(var ProfilingGroup in ProfilingGroups){
+            foreach(var profilingGroup in profilingGroups){
                 model.GroupsListViewModel.Add(new GroupsViewModel{ 
-                    Id = ProfilingGroup.Id, 
-                    Name = ProfilingGroup.Name,
-                    Date = ProfilingGroup.Data, 
-                    OperatorsInThisGroup = ProfilingGroup.ProfilingOperatorGroups.Where(x => x.Groups.Id == ProfilingGroup.Id).Count() 
+                    Id = profilingGroup.Id, 
+                    Name = profilingGroup.Name,
+                    Date = profilingGroup.Data, 
+                    OperatorsInThisGroup = _profilingGroupServices.GetProfilingGroupUsage(profilingGroup.Id) 
                 });        
             }
             
@@ -84,13 +73,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Groups(GroupsTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Gruppi";
-
-            model.HowManyFieldList = new List<GroupsTableViewModel.HowManyFields>{
-                new GroupsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new GroupsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new GroupsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new GroupsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _profilingGroupServices.GetProfilingGroupsByName(model.Find).Count;
@@ -107,15 +89,15 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 model.displayPagination = true;
             }
             
-            var ProfilingGroups = _profilingGroupServices.GetProfilingGroupsByName(model.Find, excludeRecords, model.pageSize);
+            var profilingGroups = _profilingGroupServices.GetProfilingGroupsByName(model.Find, excludeRecords, model.pageSize);
             model.GroupsListViewModel = new List<GroupsViewModel>();
             
-            foreach(var ProfilingGroup in ProfilingGroups){
+            foreach(var profilingGroup in profilingGroups){
                 model.GroupsListViewModel.Add(new GroupsViewModel{ 
-                    Id = ProfilingGroup.Id, 
-                    Name = ProfilingGroup.Name,
-                    Date = ProfilingGroup.Data, 
-                    OperatorsInThisGroup = ProfilingGroup.ProfilingOperatorGroups.Where(x => x.Groups.Id == ProfilingGroup.Id).Count() 
+                    Id = profilingGroup.Id, 
+                    Name = profilingGroup.Name,
+                    Date = profilingGroup.Data, 
+                    OperatorsInThisGroup = profilingGroup.ProfilingOperatorGroups.Where(x => x.Groups.Id == profilingGroup.Id).Count() 
                 });        
             }
             
@@ -128,28 +110,28 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new GroupAddViewModel();
             
             if(Id != 0){
-                var ProfilingGroup = _profilingGroupServices.GetProfilingGroupById(Id);
-                model.Id = ProfilingGroup.Id;
-                model.Name = ProfilingGroup.Name;
+                var profilingGroup = _profilingGroupServices.GetProfilingGroupById(Id);
+                model.Id = profilingGroup.Id;
+                model.Name = profilingGroup.Name;
 
                 var menusList = _profilingGroupServices.GetSystemMenus();
                 foreach(var menuList in menusList){
                     var ActiveMenu = false;
-                    if(ProfilingGroup.ProfilingGroupSystemMenus.Where( x => x.SystemMenus.Id == menuList.Id).Count() > 0){
+                    if(profilingGroup.ProfilingGroupSystemMenus.Where( x => x.SystemMenus.Id == menuList.Id).Count() > 0){
                         ActiveMenu = true;
                     }
 
                     model.SystemMenuList.Add(new SystemMenu(){ Id = menuList.Id, MenuFatherId = menuList.MenuFatherId, Name = menuList.Name, Active = ActiveMenu });
                 }
 
-                var Operators = _operatorServices.GetOperators();
-                foreach(var Operator in Operators){
+                var operators = _operatorServices.GetOperators();
+                foreach(var o in operators){
                     var ActiveOperator = false;
-                    if(ProfilingGroup.ProfilingOperatorGroups.Where(x => x.Operators.Id == Operator.Id).Any()){
+                    if(profilingGroup.ProfilingOperatorGroups.Where(x => x.Operators.Id == o.Id).Any()){
                         ActiveOperator = true;
                     }
 
-                    model.OperatorsList.Add(new OperatorList{ Id = Operator.Id, Email = Operator.Email, Name = Operator.Name, Lastname = Operator.Lastname, Active = ActiveOperator });
+                    model.OperatorsList.Add(new OperatorList{ Id = o.Id, Email = o.Email, Name = o.Name, Lastname = o.Lastname, Active = ActiveOperator });
                 }
             } else {
      
@@ -159,9 +141,9 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 }
                 
        
-             var Operators = _operatorServices.GetOperators();
-                foreach(var Operator in Operators){
-                    model.OperatorsList.Add(new OperatorList{ Id = Operator.Id, Email = Operator.Email, Name = Operator.Name, Lastname = Operator.Lastname, Active = false });
+             var operators = _operatorServices.GetOperators();
+                foreach(var o in operators){
+                    model.OperatorsList.Add(new OperatorList{ Id = o.Id, Email = o.Email, Name = o.Name, Lastname = o.Lastname, Active = false });
                 }
             }
 
@@ -207,19 +189,18 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 }
 
                 //INSERT PROFILING OPEATOR GROUP
-                foreach(var Operator in model.OperatorsList){
-                    if(Operator.Active){
+                foreach(var o in model.OperatorsList){
+                    if(o.Active){
                         var entitiesProfilingOperatorGroup = new ProfilingOperatorGroup();
                         entitiesProfilingOperatorGroup.Groups = entitiesGroup;
-                        entitiesProfilingOperatorGroup.Operators = _operatorServices.GetOperator(Operator.Id);
+                        entitiesProfilingOperatorGroup.Operators = _operatorServices.GetOperator(o.Id);
 
                         _profilingGroupServices.InsertProfilingOperatorGroups(entitiesProfilingOperatorGroup);
                     }
                 }
 
                 //LOG
-                var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-                var profilingOperator = _operatorServices.GetOperatorByUserId(UserId);
+                var profilingOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name);
                 if(Id != 0){
                     _logService.InsertSystemLog("Modifica", string.Concat("Modificato Gruppo Operatori: ", model.Name), profilingOperator);
                 
@@ -247,13 +228,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new EmailsTableViewModel();
 
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
-                new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
-
+            
             //Pagination
             model.totalRecords = _emailServices.GetEmails().Count;
             model.pageNumber = pageNumber;
@@ -269,17 +244,17 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 model.displayPagination = true;
             }
 
-            var Emails = _emailServices.GetEmails(excludeRecords, pageSize);
+            var emails = _emailServices.GetEmails(excludeRecords, pageSize);
             model.EmailsListViewModel = new List<EmailsViewModel>();
             
-            foreach(var Email in Emails){
+            foreach(var email in emails){
                 model.EmailsListViewModel.Add(new EmailsViewModel{ 
-                    Id = Email.Id, 
-                    Name = Email.Name,
-                    Address = Email.Email, 
-                    Pop = Email.EmailPop,
-                    Smtp = Email.EmailSmtp,
-                    NUsing = Email.ProfilingOperatorEmails.Where(x => x.SystemEmails.Id == Email.Id).Count()
+                    Id = email.Id, 
+                    Name = email.Name,
+                    Address = email.Email, 
+                    Pop = email.EmailPop,
+                    Smtp = email.EmailSmtp,
+                    NUsing = email.ProfilingOperatorEmails.Where(x => x.SystemEmails.Id == email.Id).Count()
                 });        
             }
             
@@ -291,13 +266,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         public IActionResult Emails(EmailsTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Account Email";
             
-            model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
-                new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
-
             //Pagination
             model.totalRecords = _emailServices.GetEmailsByName(model.Find).Count;
             model.pageNumber = pageNumber;
@@ -313,17 +281,17 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 model.displayPagination = true;
             }
 
-            var Emails = _emailServices.GetEmailsByName(model.Find, excludeRecords, model.pageSize);
+            var emails = _emailServices.GetEmailsByName(model.Find, excludeRecords, model.pageSize);
             model.EmailsListViewModel = new List<EmailsViewModel>();
             
-            foreach(var Email in Emails){
+            foreach(var email in emails){
                 model.EmailsListViewModel.Add(new EmailsViewModel{ 
-                    Id = Email.Id, 
-                    Name = Email.Name,
-                    Address = Email.Email, 
-                    Pop = Email.EmailPop,
-                    Smtp = Email.EmailSmtp,
-                    NUsing = Email.ProfilingOperatorEmails.Where(x => x.SystemEmails.Id == Email.Id).Count()
+                    Id = email.Id, 
+                    Name = email.Name,
+                    Address = email.Email, 
+                    Pop = email.EmailPop,
+                    Smtp = email.EmailSmtp,
+                    NUsing = email.ProfilingOperatorEmails.Where(x => x.SystemEmails.Id == email.Id).Count()
                 });        
             }
             
@@ -332,7 +300,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult EmailsAddOrEdit(int Id){
-             ViewData["Title"] = "Aggiungi Account Email";
+            ViewData["Title"] = "Aggiungi Account Email";
             var model = new EmailAddViewModel();
             
             if(Id != 0){
@@ -345,8 +313,8 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 model.EmailPortPop = entityEmail.EmailPortPop;
                 model.EmailSmtp = entityEmail.EmailSmtp;
                 model.EmailPortSmtp = entityEmail.EmailPortSmtp;
-                model.Username = _dataProtectionProvider.CreateProtector(Key).Unprotect(entityEmail.EmailUser);
-                model.Password = _dataProtectionProvider.CreateProtector(Key).Unprotect(entityEmail.EmailPassword);
+                model.Username = model.ConvertToDecrypt(entityEmail.EmailUser);
+                model.Password = model.ConvertToDecrypt(entityEmail.EmailPassword);
                 model.Signature = entityEmail.EmailSignature;
                 model.EmailSSLValue = entityEmail.EmailSSL;                
 
@@ -356,13 +324,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     Text = x.EmailProvider
                 }));
             }
-
-            model.EmailSSL = new List<EmailSSL>{
-                new EmailSSL{ Id = 1, CryptType = "Nessuna" },
-                new EmailSSL{ Id = 2, CryptType = "SSL" },
-                new EmailSSL{ Id = 3, CryptType = "TLS" }
-            };
-            
 
             return View(model);
         }
@@ -379,8 +340,8 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 entitesEmail.EmailPortPop = model.EmailPortPop;
                 entitesEmail.EmailSmtp = model.EmailSmtp;
                 entitesEmail.EmailPortSmtp = model.EmailPortSmtp;
-                entitesEmail.EmailUser = _dataProtectionProvider.CreateProtector(Key).Protect(model.Username);
-                entitesEmail.EmailPassword = _dataProtectionProvider.CreateProtector(Key).Protect(model.Password);
+                entitesEmail.EmailUser = model.UsernameCrypt;
+                entitesEmail.EmailPassword = model.PasswordCrypt;
                 entitesEmail.EmailSignature = model.Signature;
                 entitesEmail.EmailSSL = model.EmailSSLValue;
             }
@@ -393,8 +354,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             }
             
             //LOG
-            var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-            var profilingOperator = _operatorServices.GetOperatorByUserId(UserId);
+            var profilingOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name);
             if(Id != 0){
                 _logService.InsertSystemLog("Modifica", string.Concat("Modificato Account Email: ", model.Email), profilingOperator);
             
@@ -420,13 +380,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new OperatorsTableViewModel();
 
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
-                new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
-
+            
             //Pagination
             model.totalRecords = _operatorServices.GetOperators().Count;
             model.pageNumber = pageNumber;
@@ -452,7 +406,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     Name = Operator.Name,
                     LastName = Operator.Lastname,
                     EmailAddress = Operator.Email,
-                    Group = Operator.ProfilingOperatorGroups.Any() ? _profilingGroupServices.GetProfilingGroupById(Operator.ProfilingOperatorGroups.FirstOrDefault().Groups.Id).Name : "",
+                    Group =   Operator.ProfilingOperatorGroups.Any() ? _profilingGroupServices.GetProfilingGroupById(Operator.ProfilingOperatorGroups.FirstOrDefault().Groups.Id).Name : "",
                     PhoneNr = Operator.PhoneNr,
                     Enabled = Operator.Enabled == 1 ? "SI" : "NO"
                 });        
@@ -464,13 +418,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Operators(OperatorsTableViewModel model, int pageNumber = 1){
              ViewData["Title"] = "Operatori";
-
-            model.HowManyFieldList = new List<EmailsTableViewModel.HowManyFields>{
-                new EmailsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new EmailsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _operatorServices.GetOperatorsByName(model.Find).Count;
@@ -583,6 +530,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                 entitiesOperator.PasswordDeadline = model.PasswordDeadLineValue;
                 entitiesOperator.OperatorData = DateTime.Now;
                 entitiesOperator.PasswordLastEdit = DateTime.Now;
+                entitiesOperator.Enabled = model.EnabledId;
             }
 
             if(Id != 0){
@@ -635,8 +583,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             }
 
             //LOG
-            var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-            var profilingOperator = _operatorServices.GetOperatorByUserId(UserId);
+            var profilingOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name);
             if(Id != 0){
                 _logService.InsertSystemLog("Modifica", string.Concat("Modificato Account Email: ", model.UserId), profilingOperator);
             

@@ -19,13 +19,10 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
     [Authorize]
     public class OperatorController : Controller
     {
-        private readonly IDataProtectionProvider _dataProtectionProvider;
-        private const string Key = "cxz92k13md8f981hu6y7alkc";
         private readonly IOperatorServices _operatorServices;
         private readonly IEmailServices _emailServices;
 
-        public OperatorController(IDataProtectionProvider dataProtectionProvider, IOperatorServices operatorService, IEmailServices emailServices){
-            this._dataProtectionProvider = dataProtectionProvider;
+        public OperatorController(IOperatorServices operatorService, IEmailServices emailServices){
             this._operatorServices = operatorService;
             this._emailServices = emailServices;
         }
@@ -34,8 +31,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             ViewBag.HiddenMenuAside = true;
 
             var model = new OperatorAddViewModel();
-            var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-            var profilingOperator = _operatorServices.GetOperatorByUserId(UserId);
+            var profilingOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name);
             
             model.Id = profilingOperator.Id;
             model.UserId = profilingOperator.UserId;
@@ -96,8 +92,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         }
 
         public IActionResult ChangePassword(){
-            var UserId = _dataProtectionProvider.CreateProtector(Key).Unprotect(User.Identity.Name);
-            var profilingOperator = _operatorServices.GetOperatorByUserId(UserId);
+            var profilingOperator = _operatorServices.GetOperatorByUserId(User.Identity.Name);
 
             var operatorGuid = Guid.NewGuid();
             _operatorServices.ResetProfilingOperatorPassword(profilingOperator, operatorGuid);

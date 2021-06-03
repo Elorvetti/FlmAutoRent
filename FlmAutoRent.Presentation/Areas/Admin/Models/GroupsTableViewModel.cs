@@ -10,7 +10,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
         public GroupsTableViewModel(){
             GroupsListViewModel = new List<GroupsViewModel>();
         }
-
         public List<GroupsViewModel> GroupsListViewModel { get; set; } 
 
     }

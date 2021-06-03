@@ -49,12 +49,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new BrandsTableViewModel();
             
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<BrandsTableViewModel.HowManyFields>{
-                new BrandsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new BrandsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new BrandsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new BrandsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _vehiclesBrandService.GetVehiclesBrands().Count;
@@ -79,7 +73,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
                     Id = brand.Id, 
                     Name = brand.BrandName,
                     PathLogo = string.Concat("/", brand.BrandImagePath.Replace("\\", "/")),
-                    Nusing = brand.VehiclesMappings.Where(x => x.Brands.Id == brand.Id).Count() //brand.VehiclesMappings.Where(x => x.Brands.Id == brand.Id).Count()
+                    Nusing =_vehiclesBrandService.VehicleBrandUsage(brand.Id)
                 });        
             }
          
@@ -89,13 +83,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Brands(BrandsTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Brand";
-
-            model.HowManyFieldList = new List<BrandsTableViewModel.HowManyFields>{
-                new BrandsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new BrandsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new BrandsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new BrandsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _vehiclesBrandService.GetVehiclesBrandsByName(model.Find).Count;
@@ -253,14 +240,8 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
             var model = new CarsTableViewModel();
 
             model.HowManyField = pageSize;
-            model.HowManyFieldList = new List<CarsTableViewModel.HowManyFields>{
-                new CarsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new CarsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new CarsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new CarsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
-              //Pagination
+            //Pagination
             model.totalRecords = _carService.GetVehicles().Count;
             model.pageNumber = pageNumber;
             model.pageSize = pageSize;
@@ -295,13 +276,6 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Cars(CarsTableViewModel model, int pageNumber = 1){
             ViewData["Title"] = "Veicoli";
-
-            model.HowManyFieldList = new List<CarsTableViewModel.HowManyFields>{
-                new CarsTableViewModel.HowManyFields{ Value = 10, DisplayText="Visualizza 10 risultati per pagina" },
-                new CarsTableViewModel.HowManyFields{ Value = 100, DisplayText="Visualizza 100 risultati per pagina" },
-                new CarsTableViewModel.HowManyFields{ Value = 1000, DisplayText="Visualizza 1000 risultati per pagina" },
-                new CarsTableViewModel.HowManyFields{ Value = 100000, DisplayText="Visualizza tutti i risultati" }
-            };
 
             //Pagination
             model.totalRecords = _carService.GetVehiclesByName(model.Find).Count;

@@ -5,12 +5,16 @@ using FlmAutoRent.Data.Entities;
 
 namespace FlmAutoRent.Presentation.Areas.Admin.Models
 {
-    public class EmailAddViewModel
+    public class EmailAddViewModel : BaseModel
     {
 
         public EmailAddViewModel(){
             SystemOperatorEmail = new List<OperatorEmail>();
-            EmailSSL = new List<EmailSSL>();
+            EmailSSL = new List<EmailSSL>{
+                new EmailSSL{ Id = 1, CryptType = "Nessuna" },
+                new EmailSSL{ Id = 2, CryptType = "SSL" },
+                new EmailSSL{ Id = 3, CryptType = "TLS" }
+            };
         }
         public int Id { get; set; }
 
@@ -55,16 +59,19 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Models
         [Display(Name="Username")]        
         public string Username { get; set; }
 
+        public string UsernameCrypt => ConvertToEncrypt(Username);
+
         [Required(ErrorMessage="Il campo è obbligatorio")]
         [Display(Name="Password")]    
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public string PasswordCrypt => ConvertToEncrypt(Password);
 
         [Display(Name="Firma")] 
         public string Signature { get; set; }
 
         public int EmailSSLValue { get; set; }
-        public List<EmailSSL> EmailSSL { get; set; }
+        public List<EmailSSL> EmailSSL { get; private set; }
         
         public List<OperatorEmail> SystemOperatorEmail { get; set; }
     

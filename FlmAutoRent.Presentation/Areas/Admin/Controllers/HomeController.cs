@@ -23,6 +23,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Title"] = "Accedi";
             return View();
         }
     }

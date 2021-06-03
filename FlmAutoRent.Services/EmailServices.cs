@@ -38,11 +38,11 @@ namespace FlmAutoRent.Services
         }
 
         public virtual IList<SystemEmail> GetEmails(int excludeRecord = 0, int pageSize = int.MaxValue){
-            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).Skip(excludeRecord).Take(pageSize).ToList();
+            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).Skip(excludeRecord).Take(pageSize).Select( x => new SystemEmail { Id = x.Id, Name = x.Name, Email = x.Email, EmailPop = x.EmailPop, EmailSmtp = x.EmailSmtp } ).ToList();
         }   
 
         public virtual IList<SystemEmail> GetEmailsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue){
-            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).Where(x => EF.Functions.Like(x.Email, string.Concat("%", find, "%")) || EF.Functions.Like(x.Name, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).ToList();
+            return _ctx.SystemEmails.Include(x => x.ProfilingOperatorEmails).Where(x => EF.Functions.Like(x.Email, string.Concat("%", find, "%")) || EF.Functions.Like(x.Name, string.Concat("%", find, "%")) ).Skip(excludeRecord).Take(pageSize).Select( x => new SystemEmail { Id = x.Id, Name = x.Name, Email = x.Email, EmailPop = x.EmailPop, EmailSmtp = x.EmailSmtp } ).ToList();
         }
 
         public virtual IList<SystemDefaultEmail> GetDefaultEmails(){

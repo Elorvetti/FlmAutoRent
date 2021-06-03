@@ -17,6 +17,7 @@ namespace FlmAutoRent.Services
         IList<VehiclesBrand> GetVehiclesBrands(int excludeRecord = 0, int pageSize = int.MaxValue);
         IList<VehiclesBrand> GetVehiclesBrandsByName(string find, int excludeRecord = 0, int pageSize = int.MaxValue);
         VehiclesBrand GetVehiclesBrandById(int id);
+        int VehicleBrandUsage(int Id);
         void InsertBrand(VehiclesBrand model);
         void UpdateBrand(VehiclesBrand model);
         void DeleteBrand(int id);
@@ -31,11 +32,15 @@ namespace FlmAutoRent.Services
         }
         
         public IList<VehiclesBrand> GetVehiclesBrands(int excludeRecord = 0, int pageSize = int.MaxValue){
-            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).Skip(excludeRecord).Take(pageSize).ToList();
+            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).Skip(excludeRecord).Take(pageSize).Select(x => new VehiclesBrand { Id = x.Id, BrandName = x.BrandName, BrandImagePath = x.BrandImagePath }).ToList();
+        }
+
+        public int VehicleBrandUsage(int Id){
+            return _ctx.VehiclesMappings.Where(x => x.Brands.Id == Id).Count();
         }
 
         public IList<VehiclesBrand> GetVehiclesBrandsByName(string find, int excludeRecord = int.MaxValue, int pageSize = int.MaxValue){
-            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).Where(x => EF.Functions.Like(x.BrandName, string.Concat("%", find, "%"))).Skip(excludeRecord).Take(pageSize).ToList();
+            return _ctx.VehiclesBrands.Include(x => x.VehiclesMappings).Where(x => EF.Functions.Like(x.BrandName, string.Concat("%", find, "%"))).Skip(excludeRecord).Take(pageSize).Select(x => new VehiclesBrand { Id = x.Id, BrandImagePath = x.BrandImagePath }).ToList();
         }
 
         public VehiclesBrand GetVehiclesBrandById(int id){

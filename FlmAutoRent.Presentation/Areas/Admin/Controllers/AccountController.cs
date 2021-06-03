@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using FlmAutoRent.Presentation.Areas.Admin.Models;
 using FlmAutoRent.Services;
 
@@ -18,11 +14,8 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
     [Area("Admin")]
     public class AccountController : Controller
     {
-        private readonly IDataProtectionProvider _dataProtectionProvider;
-        private const string Key = "cxz92k13md8f981hu6y7alkc";
         private readonly IOperatorServices _operatorServices;
-        public AccountController(IDataProtectionProvider dataProtectionProvider, IOperatorServices operatorServices){
-            this._dataProtectionProvider = dataProtectionProvider;
+        public AccountController(IOperatorServices operatorServices){
             this._operatorServices = operatorServices;
         }
         
@@ -47,8 +40,7 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         public IActionResult Password(AccountPasswordViewModel model){
             if(ModelState.IsValid){
                 if(_operatorServices.ExistOperatorGuid(model.AccountGuid)){
-                    var passwordCrypt = _dataProtectionProvider.CreateProtector(Key).Protect(model.Password);
-                    _operatorServices.UpdateProfilingOperatorPassword(model.AccountGuid, passwordCrypt);
+                    _operatorServices.UpdateProfilingOperatorPassword(model.AccountGuid, model.PasswordCrypt);
                     
                     return RedirectToAction("Login");
                 }
@@ -70,25 +62,32 @@ namespace FlmAutoRent.Presentation.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(AccountLoginViewModel model){
             if(ModelState.IsValid){
-                if(_operatorServices.LoginOperatorSuccess(model.UserID, model.Password)){
-                    var Operator = _operatorServices.LoginOperator(model.UserID, model.Password);
-                   
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, _dataProtectionProvider.CreateProtector(Key).Protect(Operator.UserId)),
-                        new Claim(ClaimTypes.Role, _dataProtectionProvider.CreateProtector(Key).Protect(Operator.ProfilingOperatorGroups.FirstOrDefault().Groups.Name))
-                    };
-                    var authProperties = new AuthenticationProperties{ };
+                try{
+                    if(_operatorServices.LoginOperatorSuccess(model.UserID, model.PasswordCrypt)){
+                        var userLogged = _operatorServices.LoginOperator(model.UserID, model.PasswordCrypt);
+                        var userLoggedGroup = userLogged.ProfilingOperatorGroups.FirstOrDefault().Groups.Name;
 
-                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, model.UserID),
+                            new Claim(ClaimTypes.Role, model.ConvertToEncrypt(userLoggedGroup))
+                        };
+                        var authProperties = new AuthenticationProperties{ };
 
-                    return RedirectToAction("Index", "System",  new { area = "Admin" });
+                        ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                        return RedirectToAction("Index", "System",  new { area = "Admin" });
+                    }
+                } catch(Exception ex){
+                    Console.WriteLine(ex);
                 }
-
             }
 
-            return View("500");
+            var errorModel = new ErrorViewModel();
+            errorModel.Error = "Username o password errati";
+
+            return View("500", errorModel);
             
         }
         

@@ -19,8 +19,8 @@
                     </section>
                     <section class="padding-xsmall display-flex flex-direction-column">
                         <section class="padding-left-xsmall display-flex flex-direction-column">
-                            @Html.LabelFor(m => m.DefaultEmailConfig)
                             <select asp-for="Id" asp-items="Model.DefaultEmailConfig" class="select-provider margin-top-xsmall"></select>
+                            @Html.LabelFor(m => m.DefaultEmailConfig)
                         </section>
                     </section>
                 </div>
@@ -33,14 +33,14 @@
                 </section>
                 <section class="padding-xsmall display-flex flex-direction-row">
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.Name)
                         @Html.TextBoxFor(m => m.Name, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.Name)
                         <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
                     
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.Email)
                         @Html.TextBoxFor(m => m.Email, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.Email)
                         <span asp-validation-for="@Model.Email" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
                 </section>  
@@ -52,14 +52,14 @@
                 </section>
                 <section class="padding-xsmall display-flex flex-direction-row">
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.EmailPop)
                         @Html.TextBoxFor(m => m.EmailPop, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.EmailPop)
                         <span asp-validation-for="@Model.EmailPop" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
    
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.EmailPortPop)
                         @Html.TextBoxFor(m => m.EmailPortPop, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.EmailPortPop)
                         <span asp-validation-for="@Model.EmailPortPop" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
                 </section>
@@ -71,14 +71,14 @@
                 </section>
                 <section class="padding-xsmall display-flex flex-direction-row">
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.EmailSmtp)
                         @Html.TextBoxFor(m => m.EmailSmtp, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.EmailSmtp)
                         <span asp-validation-for="@Model.EmailSmtp" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
 
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.EmailPortSmtp)
                         @Html.TextBoxFor(m => m.EmailPortSmtp, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.EmailPortSmtp)
                         <span asp-validation-for="@Model.EmailPortSmtp" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
                 </section>
@@ -90,15 +90,14 @@
                 </section>
                 <section class="padding-xsmall display-flex flex-direction-row">
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.Username)
                         @Html.TextBoxFor(m => m.Username, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                        @Html.LabelFor(m => m.Username)
                         <span asp-validation-for="@Model.Username" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
    
                     <section class="padding-xsmall display-flex flex-direction-column width-1-2">
-                        @Html.LabelFor(m => m.Password)
                         <input asp-for="@Model.Password" class="margin-top-xsmall" autocomplete="off" placehodler = "..." value="@Model.Password" />
-                        
+                        @Html.LabelFor(m => m.Password)
                         <span asp-validation-for="@Model.Password" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
                 </section>

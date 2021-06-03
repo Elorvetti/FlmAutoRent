@@ -4,10 +4,10 @@ FlmAutoRent.Presentation/appsettings.json
 FlmAutoRent.Presentation/appsettings.Development.json
 FlmAutoRent.Presentation/obj/*
 FlmAutoRent.Presentation/bin/*
-FlmAutoRent.Data/bin/*
-FlmAutoRent.Data/obj/*
-FlmAutoRent.Service/bin/*
-FlmAutoRent.Service/obj/*
+FlmAutoRent.Data/bin/
+FlmAutoRent.Data/obj/
+FlmAutoRent.Service/bin/
+FlmAutoRent.Service/obj/
 .vs/*
 *.dll
 *.pdb

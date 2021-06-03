@@ -43,7 +43,7 @@ h4 { font-size: 1em; font-weight: bold; margin: .5em 0; }
 
 
 ul{ list-style-type: none; }
-p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: none; }
+p,li,a { font-size: 18px; line-height: 27px;  color: #2E2B33; text-decoration: none; }
 
 .color-black{ color:  #000000; }
 .color-black-light{ color:#212121; }
@@ -267,8 +267,8 @@ section.menu-container.fixed{ position: fixed; background-color: #000; box-shado
 section.menu-container span.btn-menu{ cursor: pointer; z-index: 9998;}
 header::before{ content: ' '; position: absolute; display: inline-block; top: 0; left: 0; right: 0; height: 700px; background-color: rgba(0, 0, 0, .6); z-index: 9995;}
 span.divider{ position: absolute; left: 0; right: 0; top: 620px; height: 80px; border-top-right-radius: 80px; background-color: #fff; z-index: 9996; }
-li.menu-items{ cursor: pointer; z-index: 9997; }
-li.menu-items a:hover{ color: #E50614!important; text-decoration: underline; font-weight: 600; }
+li.menu-items{ padding: 0 25px; cursor: pointer; z-index: 9997; }
+li.menu-items a:hover{ font-weight: 600; }
 section.vehicle, section.presentation-container{ position: relative; z-index: 9996; }
 
 
@@ -286,7 +286,7 @@ section.card a.btn{ position: absolute; display: inline-block; border-radius: 10
 section.footer{ border-top-right-radius: 80px; }
 
 /*HOMEPAGE MOBILE */
-section.min-height{ min-height: 700px; }
+section.min-height{ min-height: 1000px; }
 section.card{ min-width: 300px; max-width: 300px; }
 section.card section.background-image{ height: 190px; border-radius: 15px; }
 section.card section.vehicle-data{ margin-left: 20px; margin-right: 20px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; }
@@ -357,9 +357,9 @@ section.vehicle-data > p + p{ font-size: 18px; line-height: 23px; }
 
 @media(min-width: 1024px){
     p.vehicle-description{ margin-top: 0; }
-    section.min-height{ min-height: 800px; }
-    header::before{ min-height: 800px; }
-    span.divider{ top: 735px; }
+    section.min-height{ min-height: 1000px; }
+    header::before{ min-height: 1000px; }
+    span.divider{ top: 920px; }
     section.menu-container{ display: none; }
     section.card{ min-width: 500px; max-width: 500px; }
     section.card section.background-image{ height: 320px; border-radius: 15px; }

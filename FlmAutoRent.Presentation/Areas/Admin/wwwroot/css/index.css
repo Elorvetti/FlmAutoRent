@@ -47,24 +47,25 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
 
 .color-black{ color:  #000000; }
 .color-black-light{ color:#212121; }
-.color-grey{ color:  #757575; }
+.color-grey{ color:  #262626; }
 .color-white{ color: #fff!important; }
-.color-red{ color: #E50614!important; }
+.color-red{ color: #dc3545!important; }
 .color-pink-light{ color: #FCBDB2; }
 .color-blue-light{ color: #73AFBA; }
-.color-blue{ color: #1C2E3D; }
+.color-blue{ color: #1266f1; }
 
 .background-color-black{ background-color:  #000000; }
 .background-color-black-light{ background-color: #212121; }
-.background-color-grey{ background-color:  #757575; }
+.background-color-grey{ background-color:  #262626; }
 .background-color-white{ background-color: #fff; }
-.background-color-red{ background-color: #E50614; }
+.background-color-red{ background-color: #dc3545; }
 .background-color-pink-light{ background-color: #FCBDB2; }
 .background-color-blue-light{ background-color: #73AFBA; }
-.background-color-blue{ background-color: #1C2E3D; }
+.background-color-blue{ background-color: #1266f1; }
 .background-color-grey{ background-color: #ECECEC; }
 
 .border-grey{ border: 1px solid #e0e0e0!important;  }
+.border-black{ border: 1px solid #757575!important;  }
 .border-grey-medium{ border: 2px solid #e0e0e0;  }
 .border-bottom-grey{ border-bottom: 1px solid #e0e0e0;  }
 
@@ -84,6 +85,7 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
 .font-size-36{ font-size: 36px; line-height: 36px; }
 
 .line-height-35{ line-height: 35px!important; }
+.line-height-40{ line-height: 40px!important; }
 
 .font-weight-400{ font-weight: 400; }
 .font-weight-500{ font-weight: 500; }
@@ -166,6 +168,8 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
 .min-height-400{ min-height: 400px; }
 .min-height-300{ min-height: 300px; }
 
+.max-height-40{ max-height: 40px; }
+
 .box-shadow{
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
     -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
@@ -181,7 +185,7 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
 .border-radius-small{ border-radius: 5px; }
 .border-radius-medium{ border-radius: 20px; }
 
-.btn{ left: unset; border: 1px solid transparent; cursor: pointer; text-transform: uppercase; background-size: contain; background-position: center center; background-repeat: no-repeat; }
+.btn{ left: unset; border: 1px solid transparent; cursor: pointer; text-transform: uppercase; background-size: contain; background-position: center center; background-repeat: no-repeat; border-radius: 5px; }
 .btn:hover{ opacity: .8; border-bottom: 1px solid transparent;}
 .btn[tooltip]:hover{ opacity: 1;}
 
@@ -214,6 +218,8 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
 .justify-content-center{ justify-content: center; }
 .flex-grow-2{ flex-grow: 2; }
 .flex-grow-5-m{ flex-grow: 5; }
+.flex-wap{ flex-wrap: wrap; }
+.min-width-240-m{ min-width: 240px; }
 /* END FLEX */
 
 @media(min-width: 769px){
@@ -222,6 +228,7 @@ p,li,a { font-size: 22px; line-height: 33px;  color: #2E2B33; text-decoration: n
     .justify-content-flex-end-d{ justify-content: flex-end; }
     .margin-top-xsmall-m{ margin-top: 0; }
     .flex-grow-5-m{ flex-grow: unset; }
+    .min-width-240-m{ min-width: auto; }
 }
 
 
@@ -245,17 +252,32 @@ input[readonly],input[disabled],select[readonly],select[disabled]{ border-style:
 
 
 /* INPUT */
-input, select, textarea{ border: 2px solid #e0e0e0; padding: 0 5px; font-size: 16px; }
+form.login{ border: 1px solid #e0e0e0; }
+input[type="text"] + label, input[type="password"] + label, select + label{-webkit-transform: translateY(-3.9rem) translateY(0.8rem) scale(.9); transform: translateY(-3.9rem) translateY(0.8rem) scale(.9); background-color: #fafafa; margin-left: 5px; padding: 0 10px; max-width: max-content; }
+input, select, textarea{ border: 1px solid #757575; padding: 0 5px; font-size: 16px; border-radius: 5px; }
+input + label + span.field-validation-error, select + label + span.field-validation-error, textarea + label + span.field-validation-error{ margin-top: -20px; font-size: 14px; }
+input.input-validation-error + label, select.input-validation-error + label, textarea.input-validation-error + label{ color: #dc3545; }
+textarea{ min-height: 250px; }
 input, select{ line-height: 40px; }
 select{ height: 40px; }
 label{ font-size: 16px; line-height: 20px; font-weight: 600; } 
-input.input-validation-error{ border: 2px solid #E8594E; }
+input.input-validation-error{ border: 1px solid #dc3545; }
 input, select{ max-height: 40px; }
 input[type="file"]{ position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; max-height: none; width: 100%; z-index: 9990; }
 
 /* TABLE */
-table{ table-layout: auto; width: 100%; border-collapse: collapse; }
-table > thead > tr > th, table > tbody > tr > td{ line-height: 35px; padding-left: 10px; border: 2px solid #e0e0e0; }
+tbody, td, tfoot, th, thead, tr { border: 0 solid; border-color: inherit; }
+table{ table-layout: auto; width: 100%; border-collapse: collapse;  color: #212529; vertical-align: top; border-color: #e0e0e0; border: 1px solid #e0e0e0; }
+table > thead{ vertical-align: bottom; height: 50px; line-height: 50px; }
+table > tbody > tr { height: 70px; line-height: 70px; }
+table > tbody > tr td { height: 70px; line-height: 70px; }
+table > tbody > tr td img{ margin: 10px 0; }
+
+
+table > thead > tr > th, table > tbody > tr > td{ padding-left: 10px; border-bottom: 1px solid #e0e0e0;;  }
+table > tbody tr:nth-of-type(odd){ background-color: #ECECEC; }
+table > tbody tr:hover{ background-color: #ECECEC; }
+table > tbody tr:nth-of-type(odd):hover{ background-color: rgba(0,0,0,0.075); }
 
 /* PAGINATION */
 ul.pagination li{ line-height: 35px!important;}
@@ -318,7 +340,7 @@ main{ position: relative; display: inline-block; margin-top: 0; top: 103px; widt
 .emailSSL{ min-width: 180px; }
 
 section#password{ max-width: 370px; margin: 0 auto; }
-
+section.card-box, div.card-box{ border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; }
 /* STEP */
 span.step{ position: relative; width: 45px; height: 45px; border-radius: 50%; line-height: 45px; background-color: #757575; cursor: pointer; }
 span.step:hover{ opacity: .8; }

@@ -20,66 +20,69 @@
                     
                     <section class="padding-top-xsmall padding-bottom-xsmall display-flex flex-direction-column display-flex flex-direction-row-d">
                         <section class="padding-left-xsmall padding-right-xsmall padding-top-xsmall display-flex flex-direction-column width-1-1 width-1-2-d">
-                            @Html.LabelFor(m => m.UserId)
                             @Html.TextBoxFor(m => m.UserId, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                            @Html.LabelFor(m => m.UserId)
                             <span asp-validation-for="@Model.UserId" class="padding-left-xsmall color-red font-weight-600"></span>
                         </section>
 
                         <section class="padding-left-xsmall padding-right-xsmall padding-top-xsmall display-flex flex-direction-column width-1-1 width-1-2-d">
-                            @Html.LabelFor(m => m.Name)
                             @Html.TextBoxFor(m => m.Name, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                            @Html.LabelFor(m => m.Name)
                             <span asp-validation-for="@Model.Name" class="padding-left-xsmall color-red font-weight-600"></span>
                         </section>
                         
                         <section class="padding-left-xsmall padding-right-xsmall padding-top-xsmall display-flex flex-direction-column width-1-1 width-1-2-d">
-                            @Html.LabelFor(m => m.LastName)
                             @Html.TextBoxFor(m => m.LastName, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                            @Html.LabelFor(m => m.LastName)
                             <span asp-validation-for="@Model.LastName" class="padding-left-xsmall color-red font-weight-600"></span>
                         </section>
                     </section>
 
                     <section class="padding-top-xsmall padding-bottom-xsmall display-flex flex-direction-row">
                         <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
-                            @Html.LabelFor(m => m.EmailAddress)
                             @Html.TextBoxFor(m => m.EmailAddress, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                            @Html.LabelFor(m => m.EmailAddress)
                             <span asp-validation-for="@Model.EmailAddress" class="padding-left-xsmall color-red font-weight-600"></span>
                         </section>
                         
                         <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
-                            @Html.LabelFor(m => m.PhoneNr)
                             @Html.TextBoxFor(m => m.PhoneNr, new { @placehodler = "...", @class="margin-top-xsmall" , autocomplete="off" })
+                            @Html.LabelFor(m => m.PhoneNr)
                             <span asp-validation-for="@Model.PhoneNr" class="padding-left-xsmall color-red font-weight-600"></span>
                         </section>
                     </section>
                     
                     <section class="padding-top-xsmall padding-bottom-xsmall display-flex flex-direction-row">
                         <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
-                            @Html.LabelFor(m => m.GroupList)
                             <select asp-for="GroupId" asp-items="Model.GroupList" class="margin-top-xsmall"></select>
+                            @Html.LabelFor(m => m.GroupList)
                         </section>
                     
                         <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
-                            @Html.LabelFor(m => m.Enabled)
                             <select asp-for="EnabledId" asp-items="Model.Enabled" class="margin-top-xsmall"></select>
+                            @Html.LabelFor(m => m.Enabled)
                         </section>
                     </section>    
 
                     <section class="padding-top-xsmall padding-bottom-xsmall display-flex flex-direction-row">
                         <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
-                            @Html.LabelFor(m => m.Password)
                             
                             <section class="display-flex flex-direction-row width-1-1">
-                                <input asp-for="@Model.Password" class="margin-top-xsmall width-1-1" autocomplete="off" placeholder="*********" readonly="@(true)">
+                                <section class="display-flex flex-direction-column width-1-1">
+                                    <input asp-for="@Model.Password" class="margin-top-xsmall width-1-1" autocomplete="off" placeholder="*********" readonly="@(true)">
+                                    @Html.LabelFor(m => m.Password)
+                                </section>
+                                
                                 @if(Model.Id != 0){
-                                    <a class="btn background-color-red font-size-16 line-height-35 color-white margin-left-small padding-left-small padding-right-small margin-top-xsmall box-shadow" asp-area="Admin" asp-controller="System" asp-action="OperatorResetPassword" asp-route-id="@Model.Id">Resetta</a>
+                                    <a class="btn background-color-red font-size-16 line-height-40 max-height-40 color-white margin-left-small padding-left-small padding-right-small margin-top-xsmall box-shadow" asp-area="Admin" asp-controller="System" asp-action="OperatorResetPassword" asp-route-id="@Model.Id">Resetta</a>
                                 }
                             </section>
                             
                         </section>
                     
                         <section class="padding-left-xsmall padding-right-xsmall display-flex flex-direction-column width-1-2">
-                            @Html.LabelFor(m => m.PasswordDeadline)
                             <select asp-for="PasswordDeadLineValue" asp-items="Model.PasswordDeadline" class="margin-top-xsmall"></select>
+                            @Html.LabelFor(m => m.PasswordDeadline)
                         </section>
                     </section>                    
                 </section>  

@@ -47,8 +47,8 @@
                 </section>
                 <section class="padding-xsmall display-flex flex-direction-column">
                     <section class="padding-left-xsmall display-flex flex-direction-column">
-                        @Html.LabelFor(m => m.Title)
                         @Html.TextBoxFor(m => m.Title, new { @placehodler = "...", @class="margin-top-xsmall" , @autocomplete="off" })
+                        @Html.LabelFor(m => m.Title)
                         <span asp-validation-for="@Model.Title" class="padding-left-xsmall color-red font-weight-600"></span>
                     </section>
 
